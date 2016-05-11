@@ -9,6 +9,7 @@ import practice.generic.util.CustomHashMap;
 public class CustomLRU<K,V> {
     int capacity;
     int elements;
+    boolean verbose;
     CustomLRUEntry<K,V> first,last;
     CustomHashMap<K,CustomLRUEntry<K,V>> customHashMap;
 
@@ -21,31 +22,48 @@ public class CustomLRU<K,V> {
         System.out.println("Cache created with capacity "+capacity);
     }
 
+    public CustomLRU(int capacity, boolean verbose){
+        this.capacity = ((capacity<=2)? 3 : capacity);
+        this.elements = 0;
+        this.first = null;
+        this.last = null;
+        this.verbose = verbose;
+        customHashMap = new CustomHashMap<>(capacity);
+        System.out.println("Cache created with capacity "+capacity);
+    }
+
+    private void moveToFront(CustomLRUEntry<K,V> customLRUEntry){
+        if(first != customLRUEntry){
+            if(elements == 2){
+                last = first;
+                customLRUEntry.setNext(last);
+                customLRUEntry.setPrevious(null);
+                last.setPrevious(customLRUEntry);
+                last.setNext(null);
+            }else if(elements > 2){
+                customLRUEntry.getPrevious().setNext(customLRUEntry.getNext());
+                if(last!=customLRUEntry){
+                    customLRUEntry.getNext().setPrevious(customLRUEntry.getPrevious());
+                }else{
+                    last = customLRUEntry.getPrevious();
+                }
+                customLRUEntry.setNext(first);
+                customLRUEntry.setPrevious(null);
+                first.setPrevious(customLRUEntry);
+            }
+            first = customLRUEntry;
+        }
+    }
+
     public CustomLRUEntry<K,V> get(K key){
         CustomLRUEntry<K,V> customLRUEntry = customHashMap.get(key);
         if(customLRUEntry != null){
-            if(first != customLRUEntry){
-                if(elements == 2){
-                    last = first;
-                    customLRUEntry.setNext(last);
-                    customLRUEntry.setPrevious(null);
-                    last.setPrevious(customLRUEntry);
-                    last.setNext(null);
-                }else if(elements > 2){
-                    customLRUEntry.getPrevious().setNext(customLRUEntry.getNext());
-                    if(last!=customLRUEntry){
-                        customLRUEntry.getNext().setPrevious(customLRUEntry.getPrevious());
-                    }else{
-                        last = customLRUEntry.getPrevious();
-                    }
-                    customLRUEntry.setNext(first);
-                    customLRUEntry.setPrevious(null);
-                    first.setPrevious(customLRUEntry);
-                }
-                first = customLRUEntry;
-            }
+            moveToFront(customLRUEntry);
         }
-//        showLRUcache();
+        if(verbose){
+            System.out.print("Fetching key " + key + " : "+ customLRUEntry + "::");
+            showLRUcache();
+        }
         return customLRUEntry;
     }
 
@@ -67,8 +85,15 @@ public class CustomLRU<K,V> {
             }
             first = customLRUEntry;
             elements++;
+        }else {
+            CustomLRUEntry<K,V> customLRUEntry = customHashMap.get(key);
+            customLRUEntry.setValue(value);
+            moveToFront(customLRUEntry);
         }
-        showLRUcache();
+        if(verbose){
+            System.out.print("Putting key (" + key + ", " + value + ") ::");
+            showLRUcache();
+        }
     }
 
     public void showLRUcache(){
@@ -85,7 +110,6 @@ public class CustomLRU<K,V> {
             }
             customLRUEntry = customLRUEntry.getNext();
         }
-//        System.out.print("***"+first.toString() + ", " + last.toString());
         System.out.println("");
     }
 }
