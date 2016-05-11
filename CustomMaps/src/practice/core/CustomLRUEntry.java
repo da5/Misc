@@ -3,7 +3,13 @@ package practice.core;
 /**
  * Created by arindam.das on 11/05/16.
  */
-public class CustomLRUEntry<K,V>{
+public class CustomLRUEntry<K,V> implements Comparable<CustomLRUEntry<K,V>>{
+
+    @Override
+    public int compareTo(CustomLRUEntry<K,V> entry){
+        return this.key.toString().compareTo(entry.getKey().toString());
+    }
+
     public K getKey() {
         return key;
     }

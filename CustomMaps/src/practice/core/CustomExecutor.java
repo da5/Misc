@@ -24,7 +24,6 @@ public class CustomExecutor extends Thread{
                 System.out.println("Thread " + this.getId() + " interrupted!");
                 break;
             }
-
         }
     }
 }
