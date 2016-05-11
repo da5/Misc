@@ -1,6 +1,6 @@
 package practice.generic.util;
 
-import practice.core.CustomEntry;
+import practice.core.CustomMapEntry;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,11 +12,11 @@ public class CustomHashMap<K,V> {
 
     int capacity;
     int elements;
-    CustomEntry<K,V>[] buckets;
+    CustomMapEntry<K,V>[] buckets;
 
     public CustomHashMap(int capacity){
         this.capacity = capacity;
-        buckets = new CustomEntry[capacity];
+        buckets = new CustomMapEntry[capacity];
         elements = 0;
     }
 
@@ -26,21 +26,21 @@ public class CustomHashMap<K,V> {
 
     public void put(K key, V value){
         int hash = hash(key);
-        CustomEntry<K,V> customEntry = new CustomEntry<K,V>(key, value, null);
+        CustomMapEntry<K,V> customMapEntry = new CustomMapEntry<K,V>(key, value, null);
 
         if(buckets[hash] == null){
-            buckets[hash] = customEntry;
+            buckets[hash] = customMapEntry;
         }else{
-            CustomEntry<K,V> previous = null;
-            CustomEntry<K,V> current = buckets[hash];
+            CustomMapEntry<K,V> previous = null;
+            CustomMapEntry<K,V> current = buckets[hash];
             boolean inserted = false;
             while(current!=null){
                 if(current.getKey().equals(key)){
                     if(previous == null){
-                        buckets[hash] = customEntry;
+                        buckets[hash] = customMapEntry;
                     }else{
-                        previous.setNext(customEntry);
-                        customEntry.setNext(current.getNext());
+                        previous.setNext(customMapEntry);
+                        customMapEntry.setNext(current.getNext());
                     }
                     inserted = true;
                     break;
@@ -49,21 +49,21 @@ public class CustomHashMap<K,V> {
                 current = current.getNext();
             }
             if(!inserted){
-                previous.setNext(customEntry);
+                previous.setNext(customMapEntry);
             }
         }
         this.elements++;
     }
 
-    public CustomEntry<K,V> get(K key){
-        CustomEntry<K,V> customEntry;
-        for( customEntry = buckets[hash(key)]; customEntry!=null && !customEntry.getKey().equals(key); customEntry = customEntry.getNext());
-        return customEntry;
+    public V get(K key){
+        CustomMapEntry<K,V> customMapEntry;
+        for( customMapEntry = buckets[hash(key)]; customMapEntry !=null && !customMapEntry.getKey().equals(key); customMapEntry = customMapEntry.getNext());
+        return (customMapEntry!=null)?customMapEntry.getValue():null;
     }
 
-    public CustomEntry<K,V> remove(K key) {
-        CustomEntry<K, V> current = buckets[hash(key)];
-        CustomEntry<K, V> previous = null;
+    public CustomMapEntry<K,V> remove(K key) {
+        CustomMapEntry<K, V> current = buckets[hash(key)];
+        CustomMapEntry<K, V> previous = null;
         if(current!=null){
             while (current != null) {
                 if(current.getKey().equals(key)){
@@ -86,16 +86,16 @@ public class CustomHashMap<K,V> {
         return (this.elements==0);
     }
 
-    public Set<CustomEntry<K,V>> entrySet(){
-        Set<CustomEntry<K,V>> setOfEntries = null;
+    public Set<CustomMapEntry<K,V>> entrySet(){
+        Set<CustomMapEntry<K,V>> setOfEntries = null;
         if(!this.isEmpty()){
             setOfEntries = new HashSet<>(this.elements);
-            CustomEntry<K,V> customEntry;
+            CustomMapEntry<K,V> customMapEntry;
             for(int i =0; i<capacity;i++){
-                customEntry = buckets[i];
-                while (customEntry!=null){
-                    setOfEntries.add(customEntry);
-                    customEntry = customEntry.getNext();
+                customMapEntry = buckets[i];
+                while (customMapEntry !=null){
+                    setOfEntries.add(customMapEntry);
+                    customMapEntry = customMapEntry.getNext();
                 }
             }
         }
@@ -105,11 +105,11 @@ public class CustomHashMap<K,V> {
     public void displayAll(){
         System.out.println("Printing the HashMap");
         for(int i =0;i<capacity;i++){
-            CustomEntry<K,V> customEntry = buckets[i];
+            CustomMapEntry<K,V> customMapEntry = buckets[i];
             System.out.print("Bucket "+ i + " : ");
-            while (customEntry!=null){
-                System.out.print(customEntry.toString() + " -> ");
-                customEntry = customEntry.getNext();
+            while (customMapEntry !=null){
+                System.out.print(customMapEntry.toString() + " -> ");
+                customMapEntry = customMapEntry.getNext();
             }
             System.out.println("NULL");
         }

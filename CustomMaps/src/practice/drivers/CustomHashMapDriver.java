@@ -1,6 +1,6 @@
 package practice.drivers;
 
-import practice.core.CustomEntry;
+import practice.core.CustomMapEntry;
 import practice.generic.util.CustomHashMap;
 import java.util.Iterator;
 
@@ -27,7 +27,7 @@ public class CustomHashMapDriver {
 //
 //        System.out.println("Iterating through the HashMap");
 //        while (it.hasNext()){
-//            CustomHashMap.CustomEntry customEntry = (CustomHashMap.CustomEntry)it.next();
+//            CustomHashMap.CustomMapEntry customEntry = (CustomHashMap.CustomMapEntry)it.next();
 //            System.out.println(customEntry.toString());
 //        }
 
@@ -50,8 +50,8 @@ public class CustomHashMapDriver {
         System.out.println("Iterating through the HashMap");
         Iterator it = customHashMap.entrySet().iterator();
         while (it.hasNext()){
-            CustomEntry customEntry = (CustomEntry)it.next();
-            System.out.println(customEntry.toString());
+            CustomMapEntry customMapEntry = (CustomMapEntry)it.next();
+            System.out.println(customMapEntry.toString());
         }
     }
 }

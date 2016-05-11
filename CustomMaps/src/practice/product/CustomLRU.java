@@ -1,5 +1,6 @@
 package practice.product;
 
+import practice.core.CustomLRUEntry;
 import practice.generic.util.CustomHashMap;
 
 /**
@@ -16,46 +17,30 @@ public class CustomLRU<K,V> {
         this.elements = 0;
         this.first = null;
         this.last = null;
-        customHashMap = new CustomHashMap<K,CustomLRUEntry<K,V>>(capacity);
+        customHashMap = new CustomHashMap<>(capacity);
         System.out.println("Cache created with capacity "+capacity);
     }
 
-    public class CustomLRUEntry<K,V>{
-        K key;
-        V value;
-        CustomLRUEntry<K,V> previous, next;
-        public CustomLRUEntry(K key, V value, CustomLRUEntry<K,V> previous, CustomLRUEntry<K,V> next){
-            this.key = key;
-            this.value = value;
-            this.previous = previous;
-            this.next = next;
-        }
-
-        public String toString(){
-            return "("+this.key+", "+ this.value+")";
-        }
-    }
-
     public CustomLRUEntry<K,V> get(K key){
-        CustomLRUEntry<K,V> customLRUEntry = customHashMap.get(key).getValue();
+        CustomLRUEntry<K,V> customLRUEntry = customHashMap.get(key);
         if(customLRUEntry != null){
             if(first != customLRUEntry){
                 if(elements == 2){
                     last = first;
-                    customLRUEntry.next = last;
-                    customLRUEntry.previous = null;
-                    last.previous = customLRUEntry;
-                    last.next = null;
+                    customLRUEntry.setNext(last);
+                    customLRUEntry.setPrevious(null);
+                    last.setPrevious(customLRUEntry);
+                    last.setNext(null);
                 }else if(elements > 2){
-                    customLRUEntry.previous.next = customLRUEntry.next;
+                    customLRUEntry.getPrevious().setNext(customLRUEntry.getNext());
                     if(last!=customLRUEntry){
-                        customLRUEntry.next.previous = customLRUEntry.previous;
+                        customLRUEntry.getNext().setPrevious(customLRUEntry.getPrevious());
                     }else{
-                        last = customLRUEntry.previous;
+                        last = customLRUEntry.getPrevious();
                     }
-                    customLRUEntry.next = first;
-                    customLRUEntry.previous = null;
-                    first.previous = customLRUEntry;
+                    customLRUEntry.setNext(first);
+                    customLRUEntry.setPrevious(null);
+                    first.setPrevious(customLRUEntry);
                 }
                 first = customLRUEntry;
             }
@@ -67,16 +52,16 @@ public class CustomLRU<K,V> {
     public void put(K key, V value){
         if(customHashMap.get(key)==null){
             if(elements == capacity){   //evicting the last element
-                last.previous.next = null;
-                customHashMap.remove(last.key);
-                last = last.previous;
+                last.getPrevious().setNext(null);
+                customHashMap.remove(last.getKey());
+                last = last.getPrevious();
                 elements--;
             }
             CustomLRUEntry<K,V> customLRUEntry = new CustomLRUEntry<K,V>(key,value,null,null);
-            customHashMap.put(customLRUEntry.key,customLRUEntry);
+            customHashMap.put(customLRUEntry.getKey(),customLRUEntry);
             if(elements>0){
-                customLRUEntry.next = first;
-                first.previous = customLRUEntry;
+                customLRUEntry.setNext(first);
+                first.setPrevious(customLRUEntry);
             }else{
                 last = customLRUEntry;
             }
@@ -88,12 +73,19 @@ public class CustomLRU<K,V> {
 
     public void showLRUcache(){
         CustomLRUEntry<K,V> customLRUEntry = first;
-        System.out.print("Cache content .....");
+        System.out.print("Cache content :: ");
         while(customLRUEntry!=null){
-            System.out.print(customLRUEntry.toString() + "|");
-            customLRUEntry = customLRUEntry.next;
+            System.out.print(customLRUEntry.toString());
+            if(first == customLRUEntry){
+                System.out.print("* ");
+            }else if(last == customLRUEntry){
+                System.out.print("+ ");
+            }else{
+                System.out.print(" ");
+            }
+            customLRUEntry = customLRUEntry.getNext();
         }
-        System.out.print("***"+first.toString() + ", " + last.toString());
+//        System.out.print("***"+first.toString() + ", " + last.toString());
         System.out.println("");
     }
 }
