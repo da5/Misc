@@ -33,6 +33,7 @@ public class CustomHashMap<K,V> {
         }else{
             CustomEntry<K,V> previous = null;
             CustomEntry<K,V> current = buckets[hash];
+            boolean inserted = false;
             while(current!=null){
                 if(current.getKey().equals(key)){
                     if(previous == null){
@@ -41,11 +42,15 @@ public class CustomHashMap<K,V> {
                         previous.setNext(customEntry);
                         customEntry.setNext(current.getNext());
                     }
+                    inserted = true;
+                    break;
                 }
                 previous = current;
                 current = current.getNext();
             }
-            previous.setNext(customEntry);
+            if(!inserted){
+                previous.setNext(customEntry);
+            }
         }
         this.elements++;
     }
