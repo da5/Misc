@@ -1,5 +1,6 @@
 package practice.product;
 
+import practice.core.CustomExecutor;
 import practice.interfaces.CustomThreadPool;
 
 import java.util.concurrent.BlockingQueue;
@@ -13,15 +14,15 @@ public class CustomThreadPoolImpl implements CustomThreadPool {
     private volatile boolean power;
     private int size;
     private BlockingQueue<Runnable> taskQueue;
-    private Executor[] executors;
+    private CustomExecutor[] executors;
 
     public CustomThreadPoolImpl(int size){
         this.size = size;
         taskQueue = new LinkedBlockingQueue<>();
-        executors = new Executor[size];
+        executors = new CustomExecutor[size];
         power = true;
         for(int i = 0; i< size; i++){
-            executors[i] = new Executor();
+            executors[i] = new CustomExecutor(taskQueue);
             executors[i].start();
         }
     }
@@ -51,27 +52,6 @@ public class CustomThreadPoolImpl implements CustomThreadPool {
                 }
             }
             executors[i].interrupt();
-        }
-    }
-
-    public class Executor extends Thread{
-
-        public Executor(){
-            super();
-            System.out.println("Thread " + this.getId() + " spawned!");
-        }
-
-        public void run(){
-            while (true){
-                try{
-                    Runnable task = taskQueue.take();
-                    task.run();
-                }catch (InterruptedException e){
-                    System.out.println("Thread " + this.getId() + " interrupted!");
-                    break;
-                }
-
-            }
         }
     }
 }
