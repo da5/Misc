@@ -12,17 +12,17 @@ import java.util.Map;
  */
 public class TwoLevelMapImpl implements TwoLevelMap {
 
-    Map<String, Map<Pair<String, String>, Object>> configMap;
+    Map<String, Map<String,Map<String, String>>> configMap;
 
     public TwoLevelMapImpl() {
-        configMap = new HashMap<String, Map<Pair<String, String>, Object>>();
+        configMap = new HashMap<>();
     }
 
     @Override
     public Object getObject(Object group, Object key, Object override) {
         Object returnValue = null;
         try{
-            returnValue = configMap.get(group).get(new Pair<String, String>(String.valueOf(key),String.valueOf(override)));
+            returnValue = configMap.get(group).get(String.valueOf(key)).get(String.valueOf(override));
         }catch (Exception e){
             System.out.println("Caught exception!");
         }
@@ -32,9 +32,15 @@ public class TwoLevelMapImpl implements TwoLevelMap {
     @Override
     public void setObject(Object group, Object key, Object override, Object value) {
         if (configMap.get(group) == null) {
-            configMap.put(String.valueOf(group), new HashMap<Pair<String, String>, Object>());
+            configMap.put(String.valueOf(group), new HashMap<>());
+            configMap.get(group).put(String.valueOf(key), new HashMap<>());
+            configMap.get(group).get(String.valueOf(key)).put(String.valueOf(override),String.valueOf(value));
+        }else if(configMap.get(group).get(String.valueOf(key)) == null){
+            configMap.get(group).put(String.valueOf(key), new HashMap<>());
+            configMap.get(group).get(String.valueOf(key)).put(String.valueOf(override),String.valueOf(value));
+        }else {
+            configMap.get(group).get(String.valueOf(key)).put(String.valueOf(override),String.valueOf(value));
         }
-        configMap.get(group).put(new Pair<String, String>(String.valueOf(key),String.valueOf(override)),value);
     }
 
     @Override

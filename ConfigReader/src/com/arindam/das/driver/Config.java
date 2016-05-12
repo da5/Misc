@@ -37,7 +37,7 @@ public class Config {
                 System.out.println("Group :: " + beforeComment);
             }else if(beforeComment.matches("(.*)=(.*)")){
                 String key = beforeComment.substring(0,beforeComment.indexOf('=')).trim();
-                String value = beforeComment.substring(beforeComment.indexOf('=')).trim();
+                String value = beforeComment.substring(beforeComment.indexOf('=')+1).trim();
                 String override = "default";
                 if(key.matches("(.*)<(.*)>")){
                     override = key.substring(key.indexOf('<')+1,key.indexOf('>'));
@@ -50,7 +50,7 @@ public class Config {
     }
 
     public Object get(String searchStr){
-        return twoLevelMap.getObject(currentGroup,searchStr.substring(0,searchStr.indexOf('.')),searchStr.substring(searchStr.indexOf('.')));
+        return twoLevelMap.getObject(currentGroup,searchStr.substring(0,searchStr.indexOf('.')),searchStr.substring(searchStr.indexOf('.')+1));
     }
 
     public static Config load(String configFilePath, String[] overrides) {
