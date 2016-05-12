@@ -41,7 +41,7 @@ public class Config {
                 String override = "default";
                 if(key.matches("(.*)<(.*)>")){
                     override = key.substring(key.indexOf('<')+1,key.indexOf('>'));
-                    key = key.substring(key.indexOf('<'));
+                    key = key.substring(0,key.indexOf('<'));
                 }
                 twoLevelMap.setObject(currentGroup,key,override,value);
                 System.out.println("Key :: " + key + ", Value :: " + value + ", Override :: " + override);
@@ -68,7 +68,7 @@ public class Config {
                config.analyzeLine(fileLine.trim());
             }
         } catch (FileNotFoundException e) {
-            System.out.println("File " + configFilePath + "not found!");
+            System.out.println("File " + configFilePath + " not found!");
         } catch (Exception e) {
             System.out.println("Unknown Exception!");
             e.printStackTrace();
