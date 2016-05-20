@@ -1,6 +1,7 @@
 package practice.drivers;
 
 import practice.core.CustomLRUEntry;
+import practice.core.CustomMaze;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +21,7 @@ public class DummyDriver {
         System.out.println("");
     }
 
-    public static void main(String[] args){
+    private static void comparatorDemo(){
         List<CustomLRUEntry<String, Double>> list = new ArrayList<>();
         list.add(new CustomLRUEntry<>("Charlie", 2300.22, null, null));
         list.add(new CustomLRUEntry<>("Andy", 60.72, null, null));
@@ -37,5 +38,11 @@ public class DummyDriver {
         print(list);
         Collections.sort(list);
         print(list);
+    }
+
+    public static void main(String[] args){
+        CustomMaze customMaze = new CustomMaze(11);
+        customMaze.fillMaze();
+        customMaze.printMaze();
     }
 }
