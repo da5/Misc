@@ -38,6 +38,41 @@ public class CustomMaze {
     private void requestAddPotentialPoint(direction dir, int row, int col){
         boolean flag = false;
         if(dir == direction.left){
+            if(col - 2 > leftBorder){
+                if( maze[row][col-2]==' ' && maze[row][col-1]==' '){
+                    flag = true;
+                }
+            }
+        }else if(dir == direction.right){
+            if(col + 2 < rightBorder){
+                if( maze[row][col+2]==' ' && maze[row][col+1]==' '){
+                    flag = true;
+                }
+            }
+        }else if(dir == direction.up){
+            if(row - 2 > upBorder){
+                if( maze[row-2][col]==' ' && maze[row-1][col]==' '){
+                    flag = true;
+                }
+            }
+        }else{
+            if(row + 2 < downBorder){
+                if(maze[row+2][col]==' ' && maze[row+1][col]==' '){
+                    flag = true;
+                }
+            }
+        }
+        if(flag){
+            Point point = new Point(dir, row, col);
+            pointIndex[index] = point;
+            pointMap.put(point.getUniqueCode(), index);
+            index++;
+        }
+    }
+
+    private void requestAddPotentialPoint_(direction dir, int row, int col){
+        boolean flag = false;
+        if(dir == direction.left){
             if(col - 3 > leftBorder){
                 if(maze[row][col-3]==' ' && maze[row][col-2]==' ' && maze[row][col-1]==' '){
                      flag = true;
@@ -71,9 +106,12 @@ public class CustomMaze {
     }
 
     private void removePotentialPoint(int idx){
-        if(idx > 0 && idx<index){
+//        if(idx > 0 && idx<index){
+            Point point = pointIndex[idx];
             pointIndex[idx] = pointIndex[--index];
-        }
+            pointMap.remove(point.getUniqueCode());
+            pointMap.put(pointIndex[idx].getUniqueCode(), idx);
+//        }
     }
 
 
@@ -120,7 +158,7 @@ public class CustomMaze {
     }
 
     private void fillIndex(Point p){
-        System.out.println(p.getUniqueCode());
+//        System.out.println(p.getUniqueCode());
         int r = p.row, c = p.col;
         if(p.dir == direction.down){
             maze[p.row+1][p.col] = 'o';
@@ -139,44 +177,39 @@ public class CustomMaze {
             maze[p.row][p.col+2] = 'x';
             c+=2;
         }
-        requestAddPotentialPoint(direction.down, r,c);
-        requestAddPotentialPoint(direction.up, r,c);
-        requestAddPotentialPoint(direction.right, r,c);
-        requestAddPotentialPoint(direction.left, r,c);
         Integer idx;
         idx = pointMap.get((r - 2) + "~" + c + "~" + direction.down);
         if(idx!=null){
             removePotentialPoint(idx);
-            pointMap.remove((r - 2) + "~" + c + "~" + direction.down);
+        }else {
+            requestAddPotentialPoint(direction.up, r,c);
         }
-        idx = pointMap.remove((r+2)  + "~"+c  + "~"+ direction.up);
+        idx = pointMap.get((r+2)  + "~"+c  + "~"+ direction.up);
         if(idx!=null){
             removePotentialPoint(idx);
-            pointMap.remove((r+2)  + "~"+c  + "~"+ direction.up);
+        }else {
+            requestAddPotentialPoint(direction.down, r,c);
         }
-        idx = pointMap.remove(r  + "~"+ (c-2)  + "~"+ direction.right);
+        idx = pointMap.get(r  + "~"+ (c-2)  + "~"+ direction.right);
+        if(idx !=null){
+            removePotentialPoint(idx);
+        }else {
+            requestAddPotentialPoint(direction.left, r,c);
+        }
+        idx = pointMap.get(r  + "~"+ (c+2)  + "~"+ direction.left);
         if(idx!=null){
             removePotentialPoint(idx);
-            pointMap.remove(r  + "~"+ (c-2)  + "~"+ direction.right);
-        }
-        idx = pointMap.remove(r  + "~"+ (c+2)  + "~"+ direction.left);
-        if(idx!=null){
-            removePotentialPoint(idx);
-            pointMap.remove(r  + "~"+ (c+2)  + "~"+ direction.left);
+        }else {
+            requestAddPotentialPoint(direction.right, r,c);
         }
     }
 
     public void fillMaze(){
         Random random = new Random();
         int idx;
-        while(index > 0){
-            if(index == 1){
-                fillIndex(pointIndex[1]);
-                break;
-            }
+        while(!pointMap.isEmpty()){
             idx = random.nextInt(index);
             fillIndex(pointIndex[idx]);
-            removePotentialPoint(idx);
             printMaze();
         }
     }
