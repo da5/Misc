@@ -1,7 +1,6 @@
 package practice.drivers;
 
 import practice.core.CustomLRUEntry;
-import practice.core.CustomMaze;
 
 import java.util.*;
 
@@ -103,7 +102,8 @@ public class DummyDriver {
         }
     }
 
-    public static void main(String[] args){
+
+    private static void google(){
         List<String> strings = new ArrayList<>();
         strings.add("baba");
         strings.add("abab");
@@ -118,8 +118,47 @@ public class DummyDriver {
         System.out.println(GetMaximumSubset(strings));
 
         int[] array = {2, 1, 10, 3, 16, 201, 56, 303, 82, 517 , 110, 519};
-        System.out.println(searchSortedEvenOddArray(array, 3, array.length/2));
+        System.out.println(searchSortedEvenOddArray(array, 3, array.length / 2));
+    }
 
+    private static void arraySubsetCombinationsHelper(String numStr, String prefix){
+        if(numStr.length()==0)
+            return;
+        System.out.println(prefix + "(" + numStr + ")");
+        for(int i=0; i<numStr.length(); i++){
+            String newPrefix = prefix + "(" +numStr.substring(0,i+1) +")";
+            arraySubsetCombinationsHelper(numStr.substring(i + 1), newPrefix);
+        }
+    }
 
+    private static void arraySubsetCombinations(String numStr){
+        arraySubsetCombinationsHelper(numStr, "");
+    }
+
+    private static void parenthesisCombinationsHelper(int remainingLeft, int remainingRight, int index, char[] strArray){
+        if(remainingLeft < 0 || remainingRight<remainingLeft){
+            return;
+        }
+        if(remainingLeft == 0 && remainingRight == 0){
+            System.out.println(String.copyValueOf(strArray));
+        }else{
+            if(remainingLeft > 0){
+                strArray[index+1] = '(';
+                parenthesisCombinationsHelper(remainingLeft-1, remainingRight, index+1, strArray);
+            }
+            if(remainingRight > 0){
+                strArray[index+1] = ')';
+                parenthesisCombinationsHelper(remainingLeft, remainingRight-1, index+1, strArray);
+            }
+        }
+    }
+
+    private static void parenthesisCombinations(int n){
+        parenthesisCombinationsHelper(n, n, 0, new char[3*n]);
+    }
+
+    public static void main(String[] args){
+        arraySubsetCombinations("123");
+//        parenthesisCombinations(3);
     }
 }
