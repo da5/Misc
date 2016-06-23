@@ -159,6 +159,6 @@ public class DummyDriver {
 
     public static void main(String[] args){
         arraySubsetCombinations("123");
-//        parenthesisCombinations(3);
+        parenthesisCombinations(3);
     }
 }
