@@ -183,13 +183,23 @@ public class BaseballCityCrowd{
         baseballCity.createCity(5,5);
         baseballCity.createEdge(1, 5);
         baseballCity.createEdge(2, 5);
-        baseballCity.createEdge(3,5);
-        baseballCity.createEdge(4,5);
+        baseballCity.createEdge(3, 5);
+        baseballCity.createEdge(4, 5);
 
         baseballCity.createCity(7, 7);
         baseballCity.createCity(15, 15);
         baseballCity.createEdge(2,7);
         baseballCity.createEdge(2,15);
+
+//        baseballCity.createCity(8, 1);
+//        baseballCity.createCity(9,2);
+//        baseballCity.createCity(10,3);
+//        baseballCity.createCity(11, 4);
+//        baseballCity.createCity(12, 5);
+//        baseballCity.createEdge(11, 12);
+//        baseballCity.createEdge(10, 12);
+//        baseballCity.createEdge(9,12);
+//        baseballCity.createEdge(8,12);
 
 
 
