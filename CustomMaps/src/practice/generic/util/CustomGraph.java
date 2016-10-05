@@ -4,8 +4,6 @@ package practice.generic.util;
  * Created by arindam.das on 17/05/16.
  */
 // A Java program to find bridges in a given undirected graph
-import com.sun.tools.javac.util.Pair;
-
 import java.util.*;
 import java.util.LinkedList;
 
@@ -20,7 +18,7 @@ public class CustomGraph {
     static final int NIL = -1;
 
     private boolean[] aps;
-    private List<Pair> bdgs;
+    private List<MyPair<Integer, Integer>> bdgs;
 
     // Constructor
     public CustomGraph(int n) {
@@ -43,7 +41,7 @@ public class CustomGraph {
     // disc[] --> Stores discovery times of visited vertices
     // parent[] --> Stores parent vertices in DFS tree
     void bridgeUtil(int u, boolean visited[], int disc[],
-                    int low[], int parent[], List<Pair> bridges) {
+                    int low[], int parent[], List<MyPair<Integer, Integer>> bridges) {
 
         // Count of children in DFS Tree
         int children = 0;
@@ -74,7 +72,7 @@ public class CustomGraph {
                 // under v is below u in DFS tree, then u-v is
                 // a bridge
                 if (low[v] > disc[u]){
-                    bridges.add(Pair.of(u, v));
+                    bridges.add(new MyPair<>(u, v));
                 }
 
             }
@@ -88,13 +86,13 @@ public class CustomGraph {
 
     // DFS based function to find all bridges. It uses recursive
     // function bridgeUtil()
-    public List<Pair> bridges() {
+    public List<MyPair<Integer, Integer>> bridges() {
         // Mark all the vertices as not visited
         boolean visited[] = new boolean[n];
         int disc[] = new int[n];
         int low[] = new int[n];
         int parent[] = new int[n];
-        List<Pair> bridges = new ArrayList<>();
+        List<MyPair<Integer, Integer>> bridges = new ArrayList<>();
 
 
         // Initialize parent and visited, and ap(articulation point)
@@ -216,7 +214,7 @@ public class CustomGraph {
                 //AP exclusive
                 //Bridge exclusive
                 if(low[v] > disc[u]){
-                    bdgs.add(Pair.of(u, v));
+                    bdgs.add(new MyPair<>(u, v));
                 }
                 //Bridge exclusive
             }else if(v!=parent[u]){
@@ -251,7 +249,7 @@ public class CustomGraph {
         return aps;
     }
 
-    public List<Pair> getBridges(){
+    public List<MyPair<Integer, Integer>> getBridges(){
         if(bdgs == null){
             computeConnectivity();
         }

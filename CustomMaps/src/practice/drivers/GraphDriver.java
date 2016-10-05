@@ -1,7 +1,7 @@
 package practice.drivers;
 
-import com.sun.tools.javac.util.Pair;
 import practice.generic.util.CustomGraph;
+import practice.generic.util.MyPair;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class GraphDriver {
         customGraph.addEdge(5,3);
         customGraph.addEdge(4,6);
         boolean[] articulationPoints = customGraph.articulationPoints();
-        List<Pair> bridges = customGraph.bridges();
+        List<MyPair<Integer, Integer>> bridges = customGraph.bridges();
         System.out.print("Articulation points are :: ");
         for(int i =0 ;i < articulationPoints.length; i++){
             if(articulationPoints[i]){
@@ -29,8 +29,8 @@ public class GraphDriver {
         }
         System.out.println("");
         System.out.print("Bridges are :: ");
-        for(Pair pair: bridges){
-            System.out.print(pair.fst + "<->" + pair.snd + " ");
+        for(MyPair myPair: bridges){
+            System.out.print(myPair.getT1() + "<->" + myPair.getT2() + " ");
         }
         System.out.println("");
 
@@ -44,8 +44,8 @@ public class GraphDriver {
         System.out.println("");
         bridges = customGraph.getBridges();
         System.out.print("Bridges are :: ");
-        for(Pair pair: bridges){
-            System.out.print(pair.fst + "<->" + pair.snd + " ");
+        for(MyPair myPair: bridges){
+            System.out.print(myPair.getT1() + "<->" + myPair.getT2() + " ");
         }
         System.out.println("");
     }
