@@ -36,23 +36,71 @@ public class Misc {
 //        System.out.println(solution(A, B, 5,1,200));
 
 //        solution(120);
-        Point3D[] A = {
-                new Point3D(0,5,4),
-                new Point3D(0,0,-3),
-                new Point3D(-2,1,-6),
-                new Point3D(1,-2,2),
-                new Point3D(1,1,1),
-                new Point3D(4,-4,3),
-        };
-        System.out.println(solution(A));
-        List<Point3D> point3DS = Arrays.asList(A);
-        Collections.sort(point3DS, new Comparator<Point3D>() {
-            @Override
-            public int compare(Point3D o1, Point3D o2) {
-                return (o1.z - o2.z);
-            }
-        });
-        System.out.println(point3DS);
+//        Point3D[] A = {
+//                new Point3D(0,5,4),
+//                new Point3D(0,0,-3),
+//                new Point3D(-2,1,-6),
+//                new Point3D(1,-2,2),
+//                new Point3D(1,1,1),
+//                new Point3D(4,-4,3),
+//        };
+//        System.out.println(solution(A));
+//        List<Point3D> point3DS = Arrays.asList(A);
+//        Collections.sort(point3DS, new Comparator<Point3D>() {
+//            @Override
+//            public int compare(Point3D o1, Point3D o2) {
+//                return (o1.z - o2.z);
+//            }
+//        });
+//        System.out.println(point3DS);
+        generateSubsets(3, Arrays.asList(new Integer[]{2,3,6,7,4,4}));
+    }
+
+    public static void parenthesis(int n){
+        List<String> results = new ArrayList<>();
+        parenthesis(results, "", n, n);
+        System.out.println(results.size());
+        System.out.println(results);
+    }
+
+    public static void parenthesis(List<String> results, String str, int left, int right){
+        if(right == 0){
+            results.add(str);
+            return;
+        }
+        if(right<left){
+            return;
+        }
+        if(left > 0){
+            parenthesis(results, str+"(", left-1, right);
+        }
+        if(left<right){
+            parenthesis(results, str+")", left, right-1);
+        }
+    }
+
+    public static void generateSubsets(int k, List<Integer> list){
+        List<List<Integer>> subsets = new ArrayList<>();
+        generateSubsets(subsets, 0, k, new ArrayList<>(), list);
+        System.out.println(subsets.size());
+        for(List<Integer> subset: subsets){
+            System.out.println(subset);
+        }
+    }
+
+    public static void generateSubsets(List<List<Integer>> subsets, int i, int k, List<Integer> subset, List<Integer> list){
+        if(k==subset.size()){
+            subsets.add(subset);
+            return;
+        }
+        if(list.size() == i){
+            return;
+        }
+        generateSubsets(subsets, i+1, k, subset, list);
+        List<Integer> subset1 = new ArrayList<>(subset);
+        subset1.add(list.get(i));
+        generateSubsets(subsets, i+1, k, subset1, list);
+
     }
 
     public static int solution(Point3D[] A) {
