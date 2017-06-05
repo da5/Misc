@@ -22,38 +22,73 @@ class Point3D {
     }
 }
 
+class TNode{
+    public Boolean value;
+    public TNode left;
+    public TNode right;
+
+    public TNode(Boolean value, TNode left, TNode right) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+    }
+}
+
 public class Misc {
 
+    static TNode edit(TNode root, TNode leaf){
+        if(root.left == null || root.right==null){
+            if(root==leaf){
+                root.value = !root.value;
+            }
+        }else {
+            TNode left = edit(root.left, leaf);
+            TNode right = edit(root.right, leaf);
+            root.value = left.value & right.value;
+        }
+        return root;
+    }
+
+    static void printLevelOrder(TNode root){
+        if(root == null){
+            return;
+        }
+        Queue<TNode> queue = new LinkedList<>();
+        queue.offer(root);
+        queue.offer(new TNode(null, null, null));
+        while(!queue.isEmpty()){
+            TNode node = queue.poll();
+            if(node.value == null){
+                System.out.println("");
+                if(!queue.isEmpty()){
+                    queue.offer(node);
+                }
+
+            }else{
+                System.out.print((node.value) + " ");
+                if(node.left != null){
+                    queue.offer(node.left);
+                }
+                if(node.right != null){
+                    queue.offer(node.right);
+                }
+            }
+        }
+    }
+
     public static void main(String args[]){
-//        int[] A = {-1, 3, -4, 5, 1, -6, 2, 1};
-//        System.out.println(solution(A));
-//        int[] A = {40,40,100,80,20};
-//        int[] B = {3,3,2,2,3};
-//        System.out.println(solution(A, B, 3,5,200));
+//        generateSubsets(3, Arrays.asList(new Integer[]{2,3,6,7,4,4}));
+        TNode leaf1 = new TNode(false, null, null);
+        TNode leaf2 = new TNode(true, null, null);
+        TNode leaf3 = new TNode(true, null, null);
+        TNode leaf4 = new TNode(true, null, null);
+        TNode node1 = new TNode(false, leaf1, leaf2);
+        TNode node2 = new TNode(true, leaf3, leaf4);
+        TNode root = new TNode(false,node1,node2);
+        TNode result = edit(root,leaf2);
+        printLevelOrder(result);
 
-//        int[] A = {60,80,40};
-//        int[] B = {2,3,5};
-//        System.out.println(solution(A, B, 5,1,200));
-
-//        solution(120);
-//        Point3D[] A = {
-//                new Point3D(0,5,4),
-//                new Point3D(0,0,-3),
-//                new Point3D(-2,1,-6),
-//                new Point3D(1,-2,2),
-//                new Point3D(1,1,1),
-//                new Point3D(4,-4,3),
-//        };
-//        System.out.println(solution(A));
-//        List<Point3D> point3DS = Arrays.asList(A);
-//        Collections.sort(point3DS, new Comparator<Point3D>() {
-//            @Override
-//            public int compare(Point3D o1, Point3D o2) {
-//                return (o1.z - o2.z);
-//            }
-//        });
-//        System.out.println(point3DS);
-        generateSubsets(3, Arrays.asList(new Integer[]{2,3,6,7,4,4}));
+//        printDiamond(9);
     }
 
     public static void parenthesis(int n){
@@ -103,99 +138,26 @@ public class Misc {
 
     }
 
-    public static int solution(Point3D[] A) {
-        // write your code in Java SE 8
-        Set<Double> spheres = new HashSet<>();
-        for(int i =0 ; i< A.length; i++){
-            spheres.add(
-                    Math.sqrt(
-                            A[i].x*A[i].x + A[i].y*A[i].y + A[i].z*A[i].z
-                    )
-            );
-        }
-        return spheres.size();
+    public static void printDiamond(int n){
+        printDiamond(1,n);
     }
 
-    public static void solution(int N) {
-        for(int i =1; i<=N; i++){
-            boolean flag = false;
-            if(i%3==0){
-                flag = true;
-                System.out.print("Fizz");
-            }
-            if(i%5==0){
-                flag = true;
-                System.out.print("Buzz");
-            }
-            if(i%7==0){
-                flag = true;
-                System.out.print("Woof");
-            }
-            if(!flag){
-                System.out.println(i);
-            }else{
-                System.out.println("");
-            }
+    public static void printDiamond(int k, int n){
+        if(k>n){
+            return;
+        }
+        String printLine = "";
+        for(int i = 0; i< (n-k)/2; i++){
+            printLine = printLine + " ";
+        }
+        for(int i = 0; i<k; i++){
+            printLine = printLine + "*";
+        }
+        System.out.println(printLine);
+        printDiamond(k+2, n);
+        if(k<n){
+            System.out.println(printLine);
         }
     }
 
-    public static int solution(int[] A, int[] B, int M, int X, int Y) {
-        // write your code in Java SE 8
-        int i = 0, moves = 0;
-        int total = A.length;
-        long count = 0 , load = 0;
-        Set<Integer> floors = new HashSet<>();
-        for(;i<total; i++){
-            if(count+1>X || load+A[i]>Y){
-                moves += floors.size() + 1;
-                count = 1; load = A[i];
-                floors.clear();
-                floors.add(B[i]);
-            }else{
-                count++; load+= A[i];
-                floors.add(B[i]);
-            }
-
-        }
-        if(!floors.isEmpty()){
-            moves += floors.size()+1;
-        }
-        return moves;
-    }
-
-    public static int solution(int[] A) {
-        // write your code in Java SE 8
-        long[] sumLR = new long[A.length];
-        long[] sumRL = new long[A.length];
-        sumLR[0] = A[0];
-        sumRL[A.length-1] = A[A.length-1];
-        for(int i = 1; i< A.length; i++){
-            sumLR[i] = sumLR[i-1]+A[i];
-        }
-        for(int i = A.length-2; i>=0; i--){
-            sumRL[i] = sumLR[i+1] + A[i];
-        }
-        int i;
-        for(i=0; i< A.length; i++){
-            long left, right;
-            if(i==0){
-                left = 0;
-            }else{
-                left = sumLR[i-1];
-            }
-            if(i==A.length-1){
-                right = 0;
-            }else{
-                right = sumRL[i+1];
-            }
-            if(left == right){
-                break;
-            }
-        }
-        if(i==A.length){
-            return -1;
-        }else{
-            return i;
-        }
-    }
 }
