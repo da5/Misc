@@ -36,14 +36,14 @@ class TNode{
 
 public class Misc {
 
-    static TNode edit(TNode root, TNode leaf){
+    static TNode flipLeaf(TNode root, TNode leaf){
         if(root.left == null || root.right==null){
             if(root==leaf){
                 root.value = !root.value;
             }
         }else {
-            TNode left = edit(root.left, leaf);
-            TNode right = edit(root.right, leaf);
+            TNode left = flipLeaf(root.left, leaf);
+            TNode right = flipLeaf(root.right, leaf);
             root.value = left.value & right.value;
         }
         return root;
@@ -76,8 +76,50 @@ public class Misc {
         }
     }
 
-    public static void main(String args[]){
-//        generateSubsets(3, Arrays.asList(new Integer[]{2,3,6,7,4,4}));
+    static List<String> generatePermutationsSansDuplicate(String str){
+        List<String> permutations = new ArrayList<>();
+        Map<Character, Integer> characterMap = new HashMap<>();
+        for(int i=0; i< str.length(); i++){
+            int value = (characterMap.containsKey(str.charAt(i)))? characterMap.get(str.charAt(i)):0;
+            characterMap.put(str.charAt(i), value+1);
+        }
+        generatePermutationsSansDuplicate(permutations, characterMap, "", str);
+        return permutations;
+    }
+
+    static void generatePermutationsSansDuplicate(List<String> permutations, Map<Character, Integer> characterMap, String prefix, String str){
+        if(prefix.length() == str.length()){
+            permutations.add(prefix);
+            return;
+        }
+        for(Map.Entry<Character, Integer> entry: characterMap.entrySet()){
+            int value = entry.getValue();
+            if(value > 0){
+                characterMap.put(entry.getKey(), value-1);
+                generatePermutationsSansDuplicate(permutations, characterMap, prefix+entry.getKey(), str);
+                characterMap.put(entry.getKey(), value);
+            }
+        }
+    }
+
+    static List<String> generatePermutations(String str){
+        List<String> permutations = new ArrayList<>();
+        generatePermutations(permutations, "", str);
+        return permutations;
+    }
+
+    static void generatePermutations(List<String> permutations, String prefix, String str){
+        if(str.length() == 0){
+            permutations.add(prefix);
+        }else{
+            for(int i =0; i< str.length(); i++){
+                String newStr = str.substring(0,i)+str.substring(i+1);
+                generatePermutations(permutations, prefix+str.charAt(i), newStr);
+            }
+        }
+    }
+
+    static void flipLeafDemo(){
         TNode leaf1 = new TNode(false, null, null);
         TNode leaf2 = new TNode(true, null, null);
         TNode leaf3 = new TNode(true, null, null);
@@ -85,10 +127,14 @@ public class Misc {
         TNode node1 = new TNode(false, leaf1, leaf2);
         TNode node2 = new TNode(true, leaf3, leaf4);
         TNode root = new TNode(false,node1,node2);
-        TNode result = edit(root,leaf2);
+        TNode result = flipLeaf(root,leaf1);
         printLevelOrder(result);
+    }
 
-//        printDiamond(9);
+    public static void main(String args[]){
+        flipLeafDemo();
+        System.out.println(generatePermutationsSansDuplicate("aabab"));
+
     }
 
     public static void parenthesis(int n){
