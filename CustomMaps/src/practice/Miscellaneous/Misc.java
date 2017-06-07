@@ -22,29 +22,69 @@ class Point3D {
     }
 }
 
+class LNode{
+    public Integer value;
+
+    public LNode(Integer value) {
+        this.value = value;
+    }
+}
 class TNode{
-    public Boolean value;
+    public Boolean bool;
+    public Integer value;
     public TNode left;
     public TNode right;
 
     public TNode(Boolean value, TNode left, TNode right) {
+        this.bool = value;
+        this.left = left;
+        this.right = right;
+    }
+
+    public TNode(Integer value, Boolean bool, TNode left, TNode right) {
         this.value = value;
         this.left = left;
         this.right = right;
+        this.bool = bool;
+    }
+
+    public TNode(int value) {
+        this.value = value;
     }
 }
 
 public class Misc {
 
+    static void treeToList(Queue<LNode> list, TNode root){
+        if(root == null){
+            list.offer(new LNode(null));
+        }else{
+            list.offer(new LNode(root.value));
+            treeToList(list, root.left);
+            treeToList(list, root.right);
+        }
+    }
+
+    static TNode listToTree( Queue<LNode> list){
+        LNode lNode = list.poll();
+        TNode root = null;
+        if(lNode.value != null){
+            root = new TNode(lNode.value, false, null, null);
+            root.left = listToTree(list);
+            root.right = listToTree(list);
+        }
+        return root;
+    }
+
     static TNode flipLeaf(TNode root, TNode leaf){
         if(root.left == null || root.right==null){
             if(root==leaf){
-                root.value = !root.value;
+                root.bool = !root.bool;
             }
         }else {
             TNode left = flipLeaf(root.left, leaf);
             TNode right = flipLeaf(root.right, leaf);
-            root.value = left.value & right.value;
+            root.bool = left.bool & right.bool;
         }
         return root;
     }
@@ -58,14 +98,15 @@ public class Misc {
         queue.offer(new TNode(null, null, null));
         while(!queue.isEmpty()){
             TNode node = queue.poll();
-            if(node.value == null){
+            if(node.bool == null){
                 System.out.println("");
                 if(!queue.isEmpty()){
                     queue.offer(node);
                 }
 
             }else{
-                System.out.print((node.value) + " ");
+//                String.format("[%d,%b]",node.value, node.bool)
+                System.out.print(String.format("[%d,%b]",node.value, node.bool) + " ");
                 if(node.left != null){
                     queue.offer(node.left);
                 }
@@ -119,6 +160,24 @@ public class Misc {
         }
     }
 
+    static void treeToListDemo(){
+        TNode leaf1 = new TNode(1, false, null, null);
+        TNode leaf2 = new TNode(2, false, null, null);
+        TNode leaf3 = new TNode(3, false, null, null);
+        TNode leaf4 = new TNode(4, false, null, null);
+        TNode node12 = new TNode(12, false, leaf1, leaf2);
+        TNode node34 = new TNode(34, false, leaf3, leaf4);
+        TNode node1234 = new TNode(1234, false, node12, node34);
+        printLevelOrder(node1234);
+        Queue<LNode> list = new LinkedList<>();
+        treeToList(list, node1234);
+        for(LNode lNode : list){
+            System.out.print(lNode.value+" -> ");
+        }
+        System.out.println("end");
+        TNode root = listToTree(list);
+        printLevelOrder(root);
+    }
     static void flipLeafDemo(){
         TNode leaf1 = new TNode(false, null, null);
         TNode leaf2 = new TNode(true, null, null);
@@ -132,8 +191,9 @@ public class Misc {
     }
 
     public static void main(String args[]){
-        flipLeafDemo();
-        System.out.println(generatePermutationsSansDuplicate("aabab"));
+//        flipLeafDemo();
+//        System.out.println(generatePermutationsSansDuplicate("aabab"));
+        treeToListDemo();
 
     }
 
