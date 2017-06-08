@@ -105,7 +105,6 @@ public class Misc {
                 }
 
             }else{
-//                String.format("[%d,%b]",node.value, node.bool)
                 System.out.print(String.format("[%d,%b]",node.value, node.bool) + " ");
                 if(node.left != null){
                     queue.offer(node.left);
@@ -117,6 +116,76 @@ public class Misc {
         }
     }
 
+    static void printLevelOrder(TNode root, boolean zigZag){
+        if(root == null){
+            return;
+        }
+        Queue<TNode> queue = new LinkedList<>();
+        queue.offer(root);
+        queue.offer(new TNode(null, null, null));
+        boolean reversed = false;
+        String printLine = "";
+        while(!queue.isEmpty()){
+            TNode node = queue.poll();
+            if(node.bool == null){
+                System.out.println(printLine);
+                printLine = "";
+                if(!queue.isEmpty()){
+                    queue.offer(node);
+                    reversed = !reversed;
+                }
+            }else{
+                if(zigZag && reversed){
+                    printLine = " " + String.format("[%d,%b]",node.value, node.bool) + printLine;
+                }else {
+                    printLine = printLine + String.format("[%d,%b]",node.value, node.bool) + " ";
+                }
+                if(node.left != null){
+                    queue.offer(node.left);
+                }
+                if(node.right != null){
+                    queue.offer(node.right);
+                }
+            }
+        }
+    }
+
+    static void printLevelOrderZigZag(TNode root){
+        if(root==null){
+            return;
+        }
+        LinkedList<TNode> list1 = new LinkedList<>();
+        LinkedList<TNode> list2 = new LinkedList<>();
+        boolean reversed = false;
+        list1.addLast(root);
+        while (!list1.isEmpty() || !list2.isEmpty()){
+            if(reversed){
+                while (!list2.isEmpty()){
+                    TNode tNode = list2.pollLast();
+                    System.out.print(String.format("[%d,%b]",tNode.value, tNode.bool) + " ");
+                    if(tNode.right != null){
+                        list1.addFirst(tNode.right);
+                    }
+                    if(tNode.left != null){
+                        list1.addFirst(tNode.left);
+                    }
+                }
+            }else{
+                while (!list1.isEmpty()){
+                    TNode tNode = list1.pollFirst();
+                    System.out.print(String.format("[%d,%b]",tNode.value, tNode.bool) + " ");
+                    if(tNode.left != null){
+                        list2.addLast(tNode.left);
+                    }
+                    if(tNode.right != null){
+                        list2.addLast(tNode.right);
+                    }
+                }
+            }
+            reversed = !reversed;
+        }
+        System.out.println("");
+    }
     static List<String> generatePermutationsSansDuplicate(String str){
         List<String> permutations = new ArrayList<>();
         Map<Character, Integer> characterMap = new HashMap<>();
@@ -160,6 +229,26 @@ public class Misc {
         }
     }
 
+    static void levelOrderTraversalDemo(){
+        TNode leaf11 = new TNode(-1, false, null, null);
+        TNode leaf12 = new TNode(-2, false, null, null);
+        TNode leaf1 = new TNode(1, false, leaf11, leaf12);
+        TNode leaf2 = new TNode(2, false, null, null);
+
+        TNode leaf31 = new TNode(-3, false, null, null);
+        TNode leaf42 = new TNode(-4, false, null, null);
+
+
+        TNode leaf3 = new TNode(3, false, leaf31, null);
+        TNode leaf4 = new TNode(4, false, null, leaf42);
+        TNode node12 = new TNode(12, false, leaf1, leaf2);
+        TNode node34 = new TNode(34, false, leaf3, leaf4);
+        TNode node1234 = new TNode(1234, false, node12, node34);
+        printLevelOrder(node1234);
+        printLevelOrderZigZag(node1234);
+        printLevelOrder(node1234, true);
+    }
+
     static void treeToListDemo(){
         TNode leaf1 = new TNode(1, false, null, null);
         TNode leaf2 = new TNode(2, false, null, null);
@@ -193,7 +282,7 @@ public class Misc {
     public static void main(String args[]){
 //        flipLeafDemo();
 //        System.out.println(generatePermutationsSansDuplicate("aabab"));
-        treeToListDemo();
+        levelOrderTraversalDemo();
 
     }
 
