@@ -149,7 +149,7 @@ public class NumberOfSubarraysInRange {
                 9,4,1,5,4,1,2,9,8,6,3,12,66,21,3,9,4,1,5,4,1,2,9,8,6,3,12,66,21,3,9,4,1,5,4,1,2,9,8,6,3,12,66,21,3,
                 9,4,1,5,4,1,2,9,8,6,3,12,66,21,3,9,4,1,5,4,1,2,9,8,6,3,12,66,21,3,9,4,1,5,4,1,2,9,8,6,3,12,66,21,3};
         int min = 17;
-        int max = 122;
+        int max = 142;
         long start = System.currentTimeMillis();
 //        System.out.println(System.currentTimeMillis());
         System.out.println("countBrute " + countBrute(array, min, max));
