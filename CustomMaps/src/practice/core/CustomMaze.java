@@ -207,7 +207,7 @@ public class CustomMaze {
     public void fillMaze(){
         Random random = new Random();
         int idx;
-        while(!pointMap.isEmpty()){
+        while(!pointMap.isEmpty() && index>0){
             idx = random.nextInt(index);
             fillIndex(pointIndex[idx]);
             printMaze();

@@ -1,5 +1,7 @@
 package practice.Miscellaneous;
 
+import practice.core.CustomMaze;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -148,19 +150,31 @@ public class Solution {
     }
 
     public static void main(String[] args){
-        int[] array = {2,1,3,4,6,5};
-        System.out.println("Problem 1 :: " + solution1(array));
-        int[] array1 = {6,5,4,3,2,1};
-        System.out.println("Problem 1 :: " + solution1(array1));
+//        int[] array = {2,1,3,4,6,5};
+//        System.out.println("Problem 1 :: " + solution1(array));
+//        int[] array1 = {6,5,4,3,2,1};
+//        System.out.println("Problem 1 :: " + solution1(array1));
+//
+//        System.out.println("Problem 2 :: " + solution2(2, "1A 2F 1C"));
+//        System.out.println("Problem 2 :: " + solution2(1, ""));
+//
+//
+//        int[] arr = {5, 4, -3, 2, 0, 1, -1, 0, 2, -3, 4, -5};
+//        System.out.println("Problem 3 :: " + solution3(arr));
+//        int[] arr1 = {5, 4, 2};
+//        System.out.println("Problem 3 :: " + solution3(arr1));
 
-        System.out.println("Problem 2 :: " + solution2(2, "1A 2F 1C"));
-        System.out.println("Problem 2 :: " + solution2(1, ""));
 
+//        int[][] food = {{2,0},{0,0},{0,2},{2,2}};
+//        SnakeGame game = new SnakeGame(3,3, food);
+//        String moves = "DDRUULDRRULD";
+//        for(char c: moves.toCharArray()){
+//            System.out.println(game.move(""+c));
+//        }
 
-        int[] arr = {5, 4, -3, 2, 0, 1, -1, 0, 2, -3, 4, -5};
-        System.out.println("Problem 3 :: " + solution3(arr));
-        int[] arr1 = {5, 4, 2};
-        System.out.println("Problem 3 :: " + solution3(arr1));
+        System.out.println((int)('f'-'a'));
 
+//        ["SnakeGame","move","move","move","move","move","move","move","move","move","move","move","move"]
+//[[3,3,[[2,0],[0,0],[0,2],[2,2]]],["D"],["D"],["R"],["U"],["U"],["L"],["D"],["R"],["R"],["U"],["L"],["D"]]
     }
 }
