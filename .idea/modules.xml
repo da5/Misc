@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ConfigReader/ConfigReader.iml" filepath="$PROJECT_DIR$/ConfigReader/ConfigReader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomMaps/CustomMaps.iml" filepath="$PROJECT_DIR$/CustomMaps/CustomMaps.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Finleap/Finleap.iml" filepath="$PROJECT_DIR$/Finleap/Finleap.iml" />
+    </modules>
+  </component>
+</project>

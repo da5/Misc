@@ -1,6 +1,7 @@
 package practice.Miscellaneous;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -134,6 +135,41 @@ public class AutocompleteSystem {
 }
 
 class Driver{
+    static class Interval {
+      int start;
+      int end;
+      Interval() { start = 0; end = 0; }
+      Interval(int s, int e) { start = s; end = e; }
+  }
+
+    public List<Interval> merge(List<Interval> intervals) {
+        Interval[] result = new Interval[intervals.size()];
+        Collections.sort(intervals, new Comparator<Interval>() {
+            @Override
+            public int compare(Interval o1, Interval o2) {
+                return (o1.start == o2.start)?(o1.end-o2.end):(o1.start-o2.start);
+            }
+        });
+        int i = 0;
+        for(Interval interval: intervals){
+            if(i == 0){
+                result[i++] = interval;
+            }else{
+                if(result[i-1].end > interval.start){
+                    result[i-1].end = Math.max(result[i-1].end, interval.end);
+                }else{
+                    result[i++] = interval;
+                }
+
+            }
+        }
+        intervals.clear();
+        for(int j =0; j<i; j++){
+            intervals.add(result[j]);
+        }
+        return intervals;
+    }
+
     public static void main(String[] args){
 //        String[] sentences = {"i love you","island","iroman","i love leetcode"};
 //        int[] times = {5,3,2,2};

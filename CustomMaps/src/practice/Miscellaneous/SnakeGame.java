@@ -18,13 +18,13 @@ public class SnakeGame {
     Deque<Coordinate> foodLocations;
     int cols;
     int rows;
-    int foodIdx;
+//    int foodIdx;
     int score;
 
     public SnakeGame(int width, int height, int[][] food) {
         cols = width;
         rows = height;
-        foodIdx = 0;
+//        foodIdx = 0;
         coordinateDeque = new LinkedList<>();
         coordinateDeque.offer(new Coordinate(0,0));
         score = 0;
