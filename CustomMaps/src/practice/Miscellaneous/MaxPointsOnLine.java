@@ -6,133 +6,53 @@ import java.util.Map;
 import java.util.Set;
 
 public class MaxPointsOnLine {
-    static class Line{
-        int mn;
-        int md;
-//        int cn;
-//        int cd;
-        Line(int a, int b /*, int c, int d*/) { mn = a; md = b; /*cn = c; cd = d;*/ }
-
-        @Override
-        public boolean equals(Object obj) {
-            if(this == obj){
-                return true;
-            }
-            if(obj == null || this.getClass()!=obj.getClass()){
-                return false;
-            }
-            Line line = (Line)obj;
-            return (this.mn==line.mn && this.md==line.md /*&& this.cn==line.cn && this.cd==line.cd*/);
-        }
-
-        @Override
-        public int hashCode(){
-            int hash = 7;
-            hash = hash*31 + mn;
-            hash = hash*31 + md;
-//            hash = hash*31 + cn;
-//            hash = hash*31 + cd;
-            return hash;
-        }
-    }
-
     int egcd(int a, int b) {
-        if (a == 0)
-            return b;
-
-        a = Math.abs(a);
-        b = Math.abs(b);
-        while (b != 0) {
-            if (a > b)
-                a = a - b;
-            else
-                b = b - a;
+        while(b != 0){
+            int rem = a%b;
+            a = b;
+            b = rem;
         }
         return a;
     }
-/*
-y = mx+c
-y = (mn/md)x +c
 
-c = y - (mn * x)/md = (md.y-mn.x)/md
- */
-    Line getLine(Point p1, Point p2){
-        int mn = p1.y-p2.y;
-        int md = p1.x-p2.x;
-        int gcd = egcd(mn, md);
-        if(gcd!=0){
-            mn /= gcd;
-            md /= gcd;
-        }
-        if(mn<0 && md<0){
-            mn = -mn;
-            md = -md;
-        }
-//        int cn = md*p1.y-mn*p1.x;
-//        int cd = md;
-//        gcd = egcd(cn, cd);
-//        if(gcd != 0){
-//            cn /= gcd;
-//            cd /= gcd;
-//        }
-//        if(cn<0 && cd<0){
-//            cn = -cn;
-//            cd = -cd;
-//        }
-        return new Line(mn, md /*, cn, cd*/);
-    }
-
-    int getMax(Point[] points,  Map<Line, Set<Point>> lineMap){
-        Map<String, Integer> map = new HashMap<>();
-        int n = points.length;
-        for(int i=0; i<n; i++){
-            int count = 0;
-            String pointStr = getPointStr(points[i]);
-            if(map.containsKey(pointStr)){
-                count = map.get(pointStr);
-            }
-            map.put(pointStr, count+1);
-        }
-        int max = 0;
-        for(Map.Entry<Line, Set<Point>> entry: lineMap.entrySet()){
-//            int ctr = 0;
-//            for(String point: entry.getValue()){
-//                ctr += map.get(point);
-//            }
-//            max = Math.max(max, ctr);
-            max = Math.max(max, entry.getValue().size());
-        }
-        return max;
-    }
-
-    String getPointStr(Point point){
-        StringBuilder builder = new StringBuilder();
-        builder.append(point.x);
-        builder.append('~');
-        builder.append(point.y);
-        return builder.toString();
-    }
 
     public int maxPoints(Point[] points) {
         int n = points.length;
         if(n<=2){
             return n;
         }
-        Map<Line, Set<Point>> map = new HashMap<>();
-        for(int i=0; i<n-1; i++){
+        Map<Integer, Map<Integer, Integer>> map = new HashMap<>();
+        int result = 0;
+        for(int i=0; i<n; i++){
+            int overlaps = 0;
+            int max = 0;
             for(int j=i+1; j<n; j++){
-                if( points[i].x == points[j].x && points[i].y == points[j].y ){
+                int x = points[i].x - points[j].x;
+                int y = points[i].y - points[j].y;
+                if(x==0 && y ==0){
+                    overlaps++;
                     continue;
                 }
-                Line line = getLine(points[i], points[j]);
-                if(!map.containsKey(line)){
-                    map.put(line, new HashSet<>());
+                int gcd = egcd(x, y);
+                if(gcd != 0){
+                    x/= gcd;
+                    y/= gcd;
                 }
-                map.get(line).add(points[i]);
-                map.get(line).add(points[j]);
+
+                if(!map.containsKey(x)){
+                    map.put(x, new HashMap<>());
+                }
+                if(!map.get(x).containsKey(y)){
+                    map.get(x).put(y, 0);
+                }
+                int count = map.get(x).get(y);
+                map.get(x).put(y, count+1);
+                max = Math.max(max, map.get(x).get(y));
             }
+            result = Math.max(result, max+overlaps+1);
+            map.clear();
         }
-        return getMax(points, map);
+        return result;
     }
 }
 

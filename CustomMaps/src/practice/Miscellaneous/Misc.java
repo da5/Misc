@@ -282,7 +282,11 @@ public class Misc {
     public static void main(String args[]){
 //        flipLeafDemo();
 //        System.out.println(generatePermutationsSansDuplicate("aabab"));
-        levelOrderTraversalDemo();
+//        levelOrderTraversalDemo();
+        for(int i=0; i<=20; i++){
+            System.out.println(i + " " + (i & (-i)));
+        }
+
 
     }
 

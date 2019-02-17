@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class WordLadder2 {
     static class Node{
@@ -32,33 +30,28 @@ public class WordLadder2 {
     Map<String, Boolean> visited;
     Map<String, Set<String>> predecessor;
 
-    void linkPossibleConversions(String key){
+    List<String> getPossibleConversions(String key){
         int n = key.length();
-        Node keyNode = nodeMap.get(key);
+        List<String> list = new ArrayList<>();
         for(int i=0; i<n; i++){
             for(int j=0; j<26; j++){
                 char c = (char)('a'+j);
-                if(i==0){
-                    String conv = c + key.substring(i+1);
-                    if(!conv.equals(key) && nodeMap.containsKey(conv)){
-                        keyNode.children.add(nodeMap.get(conv));
-                    }
-
-                }else if(i==n-1){
-                    String conv = key.substring(0, i)+c;
-                    if(!conv.equals(key) && nodeMap.containsKey(conv)){
-                        keyNode.children.add(nodeMap.get(conv));
-                    }
-
-                }else{
-                    String conv = key.substring(0, i)+c+key.substring(i+1);
-                    if(!conv.equals(key) && nodeMap.containsKey(conv)){
-                        keyNode.children.add(nodeMap.get(conv));
-                    }
-
-                }
+                String conv = (i==0)? c + key.substring(i+1):
+                        ((i==n-1)? key.substring(0, i)+c:
+                                key.substring(0, i)+c+key.substring(i+1)
+                        );
+                list.add(conv);
             }
+        }
+        return list;
+    }
 
+    void linkEdges(String key){
+        Node keyNode = nodeMap.get(key);
+        for(String conv: getPossibleConversions(key)){
+            if(!conv.equals(key) && nodeMap.containsKey(conv)){
+                keyNode.children.add(nodeMap.get(conv));
+            }
         }
     }
 
@@ -75,7 +68,7 @@ public class WordLadder2 {
         nodeMap.put(beginWord, new Node(beginWord));
 
         for(String key: nodeMap.keySet()){
-            linkPossibleConversions(key);
+            linkEdges(key);
         }
         return true;
     }
@@ -102,47 +95,6 @@ public class WordLadder2 {
         return 0;
     }
 
-    public List<List<String>> findLadders2(String beginWord, String endWord, List<String> wordList) {
-        List<List<String>> result = new LinkedList<>();
-        if(!createGraph(beginWord, endWord, wordList)){
-            return result;
-        }
-        int length = findShortestConversionLength(beginWord, endWord);
-        if(length==0){
-            return result;
-        }
-        System.out.println(length);
-        Queue<Node> queue = new LinkedList<>();
-        Node node = nodeMap.get(beginWord);
-        Node c = new Node(node);
-        c.length = 1;
-        c.path = new LinkedHashSet<>();
-        c.path.add(node.word);
-        queue.offer(c);
-        while(!queue.isEmpty()){
-            node = queue.poll();
-            if(node.word.equals(endWord) ){
-
-                result.add(node.path.stream().collect(Collectors.toList()));
-            }
-            for(Node child: node.children){
-                if(!node.path.contains(child.word) && node.length<length){
-                    c = new Node(child);
-                    c.length = node.length+1;
-                    c.path = new LinkedHashSet<>();
-                    if(node.path!=null){
-                        c.path.addAll(node.path);
-                    }
-
-                    c.path.add(child.word);
-                    queue.offer(c);
-                }else{
-                }
-            }
-        }
-        return result;
-    }
-
     public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
         List<List<String>> result = new LinkedList<>();
         if (!createGraph(beginWord, endWord, wordList)) {
@@ -153,6 +105,11 @@ public class WordLadder2 {
             return result;
         }
         System.out.println(length);
+        traverse(beginWord, endWord, length, result);
+        return result;
+    }
+
+    void traverse(String beginWord, String endWord, int length, List<List<String>> result){
         predecessor = new HashMap<>();
         for(String key: visited.keySet()){
             visited.put(key, false);
@@ -175,7 +132,6 @@ public class WordLadder2 {
         List<String> path = new ArrayList<>();
         path.add(endWord);
         constructPaths(length, beginWord, endWord, path, result);
-        return result;
     }
 
     void constructPaths(int length, String start, String word, List<String> path, List<List<String>> result){
