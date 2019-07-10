@@ -1,41 +1,71 @@
 package practice.Miscellaneous;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class WordBreak {
     Map<Integer, Boolean> idxMap;
+    Map<Integer, List<String>> idxStrMap;
 
-    boolean isValid(String s, List<String> wordDict, int idx, int len) {
+    boolean _wordBreakRec(String s, List<String> wordDict, int idx, int len) {
         if(idxMap.containsKey(idx)){
             return idxMap.get(idx);
         }
+
         boolean valid = false;
         if(idx >= len) {
             valid = true;
-        }
-
-        for(String word: wordDict) {
-            int n = word.length();
-            if(idx+n <= len && s.substring(idx, idx+n).equals(word)) {
-                valid = isValid(s, wordDict, idx+n, len);
-                if(valid){
-                    break;
+        } else {
+            for(String word: wordDict) {
+                int n = word.length();
+                if(idx+n <= len && s.substring(idx, idx+n).equals(word)) {
+                    valid = _wordBreakRec(s, wordDict, idx+n, len);
+                    if(valid){
+                        break;
+                    }
                 }
             }
         }
-
         idxMap.put(idx, valid);
         return idxMap.get(idx);
     }
 
     public boolean wordBreakRec(String s, List<String> wordDict) {
         idxMap = new HashMap<>();
-        return isValid(s, wordDict, 0, s.length());
+        return _wordBreakRec(s, wordDict, 0, s.length());
+    }
+
+    List<String> _wordBreak2Rec(String s, List<String> wordDict, int idx, int len) {
+        if(!idxStrMap.containsKey(idx)){
+            List<String> list = new ArrayList<>();
+            if(idx >= len) {
+                list.add("");
+            } else {
+                for(String word: wordDict) {
+                    int n = word.length();
+                    if(idx+n <= len && s.substring(idx, idx+n).equals(word)) {
+                        List<String> subList = _wordBreak2Rec(s, wordDict, idx+n, len);
+                        for(String subWord: subList) {
+                            list.add( word + (subWord.isEmpty()?"":" ") + subWord);
+                        }
+                    }
+                }
+            }
+            idxStrMap.put(idx, list);
+        }
+        return idxStrMap.get(idx);
+    }
+
+    public List<String> wordBreak2Rec(String s, List<String> wordDict) {
+        idxStrMap = new HashMap<>();
+
+        return _wordBreak2Rec(s, wordDict, 0, s.length());
     }
 
     public boolean wordBreakDPCubic(String s, List<String> wordDict) {
@@ -86,18 +116,59 @@ public class WordBreak {
         }
         return false;
     }
+
+    public boolean wordBreakQuadratic1(String s, List<String> wordDict) {
+        int n = s.length();
+        Set<String> wordSet = new HashSet<>(wordDict);
+        boolean[] dp = new boolean[n+1];
+        dp[0] = true;
+        for(int i=1; i<=n; i++) {
+            for(int j=0; j<i; j++) {
+                if( dp[j] && wordSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                }
+            }
+        }
+        return dp[n];
+    }
+
+    public List<String> wordBreak2Quadratic(String s, List<String> wordDict) {
+        int n = s.length();
+        LinkedList<String>[] lists = new LinkedList[n+1];
+
+        Set<String> wordSet = new HashSet<>(wordDict);
+        lists[0] = new LinkedList<>();
+        lists[0].add("");
+        for(int i=1; i<=n; i++) {
+            lists[i] = new LinkedList<>();
+            for (int j = 0; j < i; j++) {
+                String subStr = s.substring(j, i);
+                if(lists[j].size()>0 && wordSet.contains(subStr)) {
+                    for(String word: lists[j]) {
+                        lists[i].add(word + (word.isEmpty()?"":" ") + subStr);
+                    }
+                }
+            }
+        }
+        return lists[n];
+    }
 }
 
 class WordBreakDriver{
     public static void main(String[] args) {
         System.out.println("Hello World!");
         String s = "catsanddog";
-        List<String> wordDict = Arrays.asList("cats", "dog", "sand", "and", "cat");
+        List<String> wordDict = Arrays.asList("cats", "dog", "sand", "and", "cat", "anddog");
         WordBreak wordBreak = new WordBreak();
+        System.out.println("Memoized");
         System.out.println(wordBreak.wordBreakRec(s, wordDict));
-        System.out.println(wordBreak.wordBreakDPCubic(s, wordDict));
-        System.out.println(wordBreak.wordBreakQuadratic(s, wordDict));
+        System.out.println(wordBreak.wordBreak2Rec(s, wordDict));
 
+        System.out.println("DP");
+        System.out.println("Cubic: " + wordBreak.wordBreakDPCubic(s, wordDict));
+        System.out.println("Quadratic: " + wordBreak.wordBreakQuadratic(s, wordDict));
+        System.out.println("Quadratic1: " + wordBreak.wordBreakQuadratic1(s, wordDict));
+        System.out.println(wordBreak.wordBreak2Quadratic(s, wordDict));
 
     }
 
