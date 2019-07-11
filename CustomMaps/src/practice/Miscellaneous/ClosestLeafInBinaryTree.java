@@ -7,8 +7,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-
-public class NearestLeafNode {
+//https://leetcode.com/problems/closest-leaf-in-a-binary-tree/submissions/
+public class ClosestLeafInBinaryTree {
     static boolean found;
     static class TreeNode {
         int val;
@@ -19,7 +19,7 @@ public class NearestLeafNode {
 
     TreeNode root;
 
-    NearestLeafNode(Integer[] arr){
+    ClosestLeafInBinaryTree(Integer[] arr){
         root = new TreeNode(arr[0]);
         Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);
@@ -105,7 +105,7 @@ public class NearestLeafNode {
 class NearestLeafNodeDriver{
     public static void main(String[] args){
         Integer[] arr = {1,2,3,null,null,4,5,6,null,null,7,8,9,10};
-        NearestLeafNode nearestLeafNode = new NearestLeafNode(arr);
+        ClosestLeafInBinaryTree nearestLeafNode = new ClosestLeafInBinaryTree(arr);
         System.out.println(nearestLeafNode.findClosestLeaf(nearestLeafNode.root, 4));
 
     }
