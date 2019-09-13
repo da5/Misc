@@ -13,8 +13,8 @@ every word following rules below.
     Begin with the first character and then the number of characters abbreviated,
     which followed by the last character.
     If there are any conflict, that is more than one words share the same abbreviation,
-    a longer prefix is used instead of only the first character until making the map from
-    word to abbreviation become unique. In other words, a final abbreviation cannot map to
+    a longer prefix is used instead of only the first character until making the stringMap from
+    word to abbreviation become unique. In other words, a final abbreviation cannot stringMap to
     more than one original words.
     If the abbreviation doesn't make the word shorter, then keep it as original.
 
