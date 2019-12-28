@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 public class WordBreak {
     Map<Integer, Boolean> idxMap;
@@ -97,24 +98,14 @@ public class WordBreak {
         boolean[] dp = new boolean[n];
         for(int i=0; i<n; i++) {
             String prefix = s.substring(0, i+1);
-            if(!dp[i] && wordSet.contains(prefix)) {
-                dp[i] = true;
-            }
+            dp[i] |= wordSet.contains(prefix);
             if(dp[i]) {
-                if(i==n-1) {
-                    return true;
-                }
                 for(int j=i; j<n; j++) {
-                    if(!dp[j] && wordSet.contains(s.substring(i+1, j+1))) {
-                        dp[j] = true;
-                    }
-                    if(dp[j] && j==n-1) {
-                        return true;
-                    }
+                    dp[j] |= wordSet.contains(s.substring(i+1, j+1));
                 }
             }
         }
-        return false;
+        return dp[n-1];
     }
 
     public boolean wordBreakQuadratic1(String s, List<String> wordDict) {
@@ -169,7 +160,15 @@ class WordBreakDriver{
         System.out.println("Quadratic: " + wordBreak.wordBreakQuadratic(s, wordDict));
         System.out.println("Quadratic1: " + wordBreak.wordBreakQuadratic1(s, wordDict));
         System.out.println(wordBreak.wordBreak2Quadratic(s, wordDict));
+        System.out.println(wordBreak.wordBreak2Rec(s, wordDict));
 
+
+        String expr = "(1+(4+55+2  ) -3)+(61   +8)";
+        StringTokenizer tokenizer = new StringTokenizer(expr,"+-*/()", true);
+        System.out.println(expr);
+        while (tokenizer.hasMoreTokens()) {
+            System.out.println(tokenizer.nextToken());
+        }
     }
 
 }
