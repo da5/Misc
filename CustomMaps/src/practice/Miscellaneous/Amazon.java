@@ -124,7 +124,7 @@ public class Amazon {
 
     private boolean nextIteration(int[][] matrix, int rows, int cols, int hour) {
         boolean moreIteration = false;
-        System.out.println("----------");
+        System.out.println("---------");
         for(int i =0; i<rows; i++){
             for(int j=0; j<cols; j++){
                 if(hour>0 && matrix[i][j]>0) {
