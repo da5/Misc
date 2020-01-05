@@ -156,13 +156,16 @@ public class BasicCalculatorIII {
 //        System.out.println(print(tokens));
         return evaluate(postfix);
     }
+
+
+
 }
 
 class BasicCalculatorIIIDriver {
     public static void main(String[] args) {
         BasicCalculatorIII calculator = new BasicCalculatorIII();
-//        System.out.println(calculator.calculate("2*(5+5*2)/3+(6/2+8)"));
-//        System.out.println(calculator.calculate("(2+6* 3+5- (3*14/7+2)*5)+3"));
+        System.out.println(calculator.calculate("2*(5+5*2)/3+(6/2+8)"));
+        System.out.println(calculator.calculate("(2+6* 3+5- (3*14/7+2)*5)+3"));
         System.out.println(calculator.calculate("-1+4*3/3/3"));
     }
 }
