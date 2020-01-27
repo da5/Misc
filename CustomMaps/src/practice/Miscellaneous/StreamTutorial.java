@@ -229,7 +229,7 @@ public class StreamTutorial {
                 .flatMap(p -> p)
                 .filter(Objects::nonNull)
                 .filter(p -> p.getStatus().isPresent() && "DONE".equals(p.getStatus().get()))
-                .filter(p -> p.getId()!=null && p.getId().length()>0)
+                .filter(p -> p.getId()!=null && !p.getId().isEmpty())
                 .map(p -> Long.parseLong(p.getId()))
                 .collect(Collectors.toSet());
 

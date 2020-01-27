@@ -1,7 +1,7 @@
 package practice.Miscellaneous;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransactionalStack {
     static class Element {
@@ -49,14 +49,16 @@ public class TransactionalStack {
         }
     }
 
-    Deque<Element> stack;
+//    Deque<Element> stack;
+    List<Element> transactions;
     Element head;
     Element tail;
     Element top;
     boolean verbose;
 
     public TransactionalStack() {
-        stack = new LinkedList<>();
+//        stack = new LinkedList<>();
+        transactions = new ArrayList<>();
         head = null;
         tail = null;
         verbose = true;
@@ -119,17 +121,22 @@ public class TransactionalStack {
     public void begin() {
         Element element = new Element(true);
         _push(element);
-        stack.push(element);
+//        stack.push(element);
+        transactions.add(element);
         if(verbose) {
             print("Begin");
         }
     }
 
     public boolean rollback() {
-        if(stack.isEmpty()) {
-           return false;
+//        if(stack.isEmpty()) {
+//           return false;
+//        }
+        if(transactions.isEmpty()) {
+            return false;
         }
-        Element element = stack.pop();
+//        Element element = stack.pop();
+        Element element = transactions.remove(transactions.size()-1);
         if(element==head) {
             head = tail = null;
         } else {
@@ -155,10 +162,14 @@ public class TransactionalStack {
     }
 
     public boolean commit() {
-        if(stack.isEmpty()) {
+//        if(stack.isEmpty()) {
+//            return false;
+//        }
+        if(transactions.isEmpty()) {
             return false;
         }
-        Element element = stack.pop();
+//        Element element = stack.pop();
+        Element element = transactions.remove(transactions.size()-1);
         if(element==head) {
             if(element==tail) {
                 head = tail = null;
@@ -224,12 +235,25 @@ class TransactionalStackDriver {
         System.out.println(  transactionalStack.top()==0);
     }
 
+    private static void test4() {
+        TransactionalStack transactionalStack = new TransactionalStack();
+        transactionalStack.begin();
+        System.out.println(transactionalStack.top()==0);
+        transactionalStack.begin();
+        System.out.println(transactionalStack.top()==0);
+        System.out.println(transactionalStack.commit());
+        System.out.println(transactionalStack.commit());
+        System.out.println(  transactionalStack.top()==0);
+    }
+
     public static void main(String[] args) {
         test1();
         System.out.println("------------------------------");
         test2();
         System.out.println("------------------------------");
         test3();
+        System.out.println("------------------------------");
+        test4();
 
     }
 }
