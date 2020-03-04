@@ -77,7 +77,7 @@ public class AutocompleteSystem {
     }
 
     Queue<TrieEntry> getSentences(TrieEntry entry){
-        Queue<TrieEntry> queue = new PriorityQueue<>( new Comparator<TrieEntry>() {
+        Queue<TrieEntry> queue1 = new PriorityQueue<>( new Comparator<TrieEntry>() {
             @Override
             public int compare(TrieEntry o1, TrieEntry o2) {
                 if(o1.hits!=o2.hits){
@@ -86,6 +86,16 @@ public class AutocompleteSystem {
                 return o1.sentence.compareTo(o2.sentence);
             }
         });
+
+        Queue<TrieEntry> queue = new PriorityQueue<>(
+                (x,y) -> {
+                        if(x.hits!=y.hits){
+                            return y.hits-x.hits;
+                        } else {
+                            return x.sentence.compareTo(y.sentence);
+                        }
+                }
+        );
         traverseAndCollect(entry, queue);
         return queue;
     }
