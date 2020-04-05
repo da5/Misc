@@ -7,19 +7,21 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Orchestrator {
-    Map<String, List<Message>> channels;
-    Map<String, Map<Integer, Integer>> consumerMap;
-    Map<String, ReentrantLock> channelLocks;
+    Map<String, List<Message>> channels;            // list of channels
+    Map<String, Map<Integer, Integer>> consumerMap; //channelId -> consumerId -> offset, to maintain offset for every (channel, consumer) tuple
+    Map<String, ReentrantLock> channelLocks;        // locks per channel
 
     private static Orchestrator orchestrator;
 
     private Orchestrator() {
-        Map<String, List<Message>> channels = new HashMap<>();
-        channels.put("channel1", new ArrayList<>());
-        channels.put("channel2", new ArrayList<>());
+        channels = new HashMap<>();
+//        channels.put("channel1", new ArrayList<>());
+//        channels.put("channel2", new ArrayList<>());
 
         consumerMap = new HashMap<>();
         channelLocks = new HashMap<>();
+        createChannel("channel1");
+        createChannel("channel2");
     }
 
     public static Orchestrator getInstance() {
@@ -69,7 +71,7 @@ public class Orchestrator {
         if(!consumerMap.containsKey(channel)) {
             return null;
         }
-        if(consumerMap.get(channel).containsKey(consumerId)) {
+        if(!consumerMap.get(channel).containsKey(consumerId)) {
             return null;
         }
         int offset = consumerMap.get(channel).get(consumerId);

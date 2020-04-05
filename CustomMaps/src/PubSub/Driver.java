@@ -25,6 +25,8 @@ public class Driver {
         System.out.println(consumer1.consume("channel1"));
         System.out.println(consumer2.consume("channel1"));
 
+        System.out.println(consumer1.consume("channel1"));
+        System.out.println(consumer2.consume("channel1"));
 
     }
 }
