@@ -1,7 +1,7 @@
 package PubSub;
 
 public abstract class Consumer {
-    private int id;
+    protected int id;
     protected Orchestrator orchestrator;
 
     public Consumer(int id) {
@@ -22,7 +22,9 @@ public abstract class Consumer {
     }
 
     public Message consume(String channel) {
-        return orchestrator.consume(channel, id);
+        Message message = orchestrator.consume(channel, id);
+        process(message);
+        return message;
     }
 
     public abstract void process(Message message);

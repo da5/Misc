@@ -7,6 +7,6 @@ public class SimpleConsumer extends Consumer {
     }
 
     public void process(Message message) {
-        System.out.println(message.content);
+        System.out.println(String.format("Consumer %d processing message %s", id, message));
     }
 }

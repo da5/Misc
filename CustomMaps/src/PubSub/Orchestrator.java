@@ -15,13 +15,8 @@ public class Orchestrator {
 
     private Orchestrator() {
         channels = new HashMap<>();
-//        channels.put("channel1", new ArrayList<>());
-//        channels.put("channel2", new ArrayList<>());
-
         consumerMap = new HashMap<>();
         channelLocks = new HashMap<>();
-        createChannel("channel1");
-        createChannel("channel2");
     }
 
     public static Orchestrator getInstance() {
@@ -75,8 +70,11 @@ public class Orchestrator {
             return null;
         }
         int offset = consumerMap.get(channel).get(consumerId);
-        Message message = channels.get(channel).get(offset);
-        consumerMap.get(channel).put(consumerId, offset+1);
+        Message message = null;
+        if(channels.get(channel).size()>offset) {
+            message = channels.get(channel).get(offset);
+            consumerMap.get(channel).put(consumerId, offset+1);
+        }
         return message;
     }
 

@@ -7,7 +7,7 @@ consumer1, consumer2 consuming from channel1
 public class Driver {
     public static void main(String[] args) {
         Publisher publisher = new SimplePublisher(1);
-
+        publisher.createChannel("channel1");
 
         Consumer consumer1 = new SimpleConsumer(1);
         Consumer consumer2 = new SimpleConsumer(2);
@@ -28,5 +28,8 @@ public class Driver {
         System.out.println(consumer1.consume("channel1"));
         System.out.println(consumer2.consume("channel1"));
 
+        consumer1.rewind("channel1", 1);
+        System.out.println(consumer1.consume("channel1"));
+        System.out.println(consumer2.consume("channel1"));
     }
 }

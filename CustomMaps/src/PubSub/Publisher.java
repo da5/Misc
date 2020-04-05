@@ -15,6 +15,10 @@ public abstract class Publisher {
 
     public abstract Message buildMessage(String content);
 
+    public boolean createChannel(String channel) {
+        return orchestrator.createChannel(channel);
+    }
+
     public boolean publish(String channel, Message message) throws InterruptedException{
         return orchestrator.publish(channel, message);
     }
