@@ -40,9 +40,6 @@ public class SentenceSimilarity {
             }
             if(parentX.rank > parentY.rank){
                 y.parent = parentX;
-                if(parentX.rank == parentY.rank){
-                    parentX.rank += 1;
-                }
             }else{
                 x.parent = parentY;
                 if(parentX.rank == parentY.rank){
