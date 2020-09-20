@@ -16,6 +16,8 @@ public class GameFactory {
             case vsComputer:
                 game = new Game(new User("Player-1", new CommandLineInput()), new Computer());
                 break;
+            case simulation:
+                game = new Game(new Computer(), new Computer());
         }
         return game;
     }

@@ -2,7 +2,8 @@ package com.arindam.das.imc.common;
 
 public enum GameType {
     vsHuman("H"),
-    vsComputer("C");
+    vsComputer("C"),
+    simulation("S");
 
     public final String label;
 
@@ -20,6 +21,6 @@ public enum GameType {
     }
 
     public static String options() {
-        return "Please enter an opponent: Human(H) or Computer(C) ::";
+        return "Please enter an opponent: Human(H), Computer(C), Simulation(S) or anything else to EXIT ::";
     }
 }

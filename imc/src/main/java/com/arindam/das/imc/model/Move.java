@@ -16,10 +16,12 @@ public abstract class Move {
         beatsMoves = new HashSet<>();
         losesMoves = new ArrayList<>();
         random = new Random();
+        //Configuring the set of moves it(derived class) beats
         for(int i=1; i<=possibleMoves/2; i++) {
             int nextIdx = (getMoveType().ordinal()+i) % possibleMoves;
             beatsMoves.add( MoveType.values()[nextIdx] );
         }
+        //Configuring the set of moves it(derived class) is beaten by
         for(MoveType moveType: MoveType.values()) {
             if(!beatsMoves.contains(moveType) && !moveType.equals(getMoveType())) {
                 losesMoves.add(moveType);

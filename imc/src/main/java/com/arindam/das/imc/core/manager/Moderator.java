@@ -59,7 +59,7 @@ public class Moderator {
     @VisibleForTesting
     protected GameType gameMenu() {
         System.out.println("Select a game type ... " + GameType.options());
-        String input =commandLineInput.getUserInput();
+        String input = commandLineInput.getUserInput();
         GameType gameType = GameType.valueOfLabel(input.toUpperCase());
         if(gameType==null) {
             menuType = MenuType.ExitMenu;
