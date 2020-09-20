@@ -2,7 +2,6 @@ package com.arindam.das.imc.core.factory;
 
 import com.arindam.das.imc.common.MoveType;
 import com.arindam.das.imc.model.Move;
-import com.arindam.das.imc.model.moves.Rock;
 import org.junit.Before;
 import org.junit.Test;
 

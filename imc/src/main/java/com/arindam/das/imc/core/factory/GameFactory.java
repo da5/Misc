@@ -1,5 +1,6 @@
 package com.arindam.das.imc.core.factory;
 
+import com.arindam.das.imc.common.CommandLineInput;
 import com.arindam.das.imc.common.GameType;
 import com.arindam.das.imc.model.Game;
 import com.arindam.das.imc.model.player.Computer;
@@ -10,10 +11,10 @@ public class GameFactory {
         Game game = null;
         switch (gameType) {
             case vsHuman:
-                game = new Game(new User("Player-1"), new User("Player-2"));
+                game = new Game(new User("Player-1", new CommandLineInput()), new User("Player-2", new CommandLineInput()));
                 break;
             case vsComputer:
-                game = new Game(new User("Player-1"), new Computer());
+                game = new Game(new User("Player-1", new CommandLineInput()), new Computer());
                 break;
         }
         return game;

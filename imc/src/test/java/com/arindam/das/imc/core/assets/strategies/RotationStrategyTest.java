@@ -1,7 +1,7 @@
 package com.arindam.das.imc.core.assets.strategies;
 
-import com.arindam.das.imc.exceptions.StrategyNotReadyException;
 import com.arindam.das.imc.common.MoveType;
+import com.arindam.das.imc.exceptions.StrategyNotReadyException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,26 +1,26 @@
 package com.arindam.das.imc.core.manager;
 
+import com.arindam.das.imc.common.CommandLineInput;
 import com.arindam.das.imc.common.GameType;
 import com.arindam.das.imc.common.MenuType;
 import com.arindam.das.imc.common.MoveType;
 import com.arindam.das.imc.core.factory.GameFactory;
 import com.arindam.das.imc.model.Game;
-
-import java.util.Scanner;
+import com.google.common.annotations.VisibleForTesting;
 
 public class Moderator {
-    private Scanner scanner;
     private boolean power;
     private MenuType menuType;
+    private CommandLineInput commandLineInput;
 
-    private Moderator() {
-        power = true;
-        menuType = MenuType.GameMenu;
-        scanner = new Scanner(System.in);
+    private Moderator(CommandLineInput commandLineInput) {
+        this.power = true;
+        this.menuType = MenuType.GameMenu;
+        this.commandLineInput = commandLineInput;
     }
 
     private static class BillPughSingleton {
-        private static final Moderator instance = new Moderator();
+        private static final Moderator instance = new Moderator(new CommandLineInput());
     }
 
     public static Moderator getInstance() {
@@ -44,16 +44,22 @@ public class Moderator {
                     }
                     break;
                 case ExitMenu:
-                    power = false;
+                    exitMenu();
                     break;
             }
             System.out.println("---------------------------------------------");
         }
     }
 
-    private GameType gameMenu() {
+    @VisibleForTesting
+    protected void exitMenu() {
+        power = false;
+    }
+
+    @VisibleForTesting
+    protected GameType gameMenu() {
         System.out.println("Select a game type ... " + GameType.options());
-        String input = scanner.next();
+        String input =commandLineInput.getUserInput();
         GameType gameType = GameType.valueOfLabel(input.toUpperCase());
         if(gameType==null) {
             menuType = MenuType.ExitMenu;
@@ -63,7 +69,8 @@ public class Moderator {
         return gameType;
     }
 
-    private void moveMenu(Game game) {
+    @VisibleForTesting
+    protected void moveMenu(Game game) {
         System.out.println("Select a move type ... " + MoveType.options());
         Game.GameMove gameMove = game.performMove();
         if(gameMove==null) {
@@ -71,5 +78,20 @@ public class Moderator {
         } else {
             System.out.println(gameMove.toString());
         }
+    }
+
+    @VisibleForTesting
+    protected boolean isPower() {
+        return power;
+    }
+
+    @VisibleForTesting
+    protected MenuType getMenuType() {
+        return menuType;
+    }
+
+    @VisibleForTesting
+    protected void setCommandLineInput(CommandLineInput commandLineInput) {
+        this.commandLineInput = commandLineInput;
     }
 }

@@ -4,9 +4,7 @@ import com.arindam.das.imc.common.MoveType;
 import com.arindam.das.imc.core.factory.MoveFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,16 +14,18 @@ public class Game {
 
     @AllArgsConstructor
     @Getter
-    @ToString
     public static class GameMove {
         private final MoveType player1Move;
         private final MoveType player2Move;
         private final int[] score;
+
+        @Override
+        public String toString() {
+            return String.format(" %s vs %s, [ %d, %d ]", player1Move, player2Move, score[0], score[1]);
+        }
     }
 
-    @Resource
     private final Player player1;
-    @Resource
     private final Player player2;
     private final List<GameMove> gameMoves;
     private final Map<MoveType, Move> moveMap;
@@ -69,10 +69,6 @@ public class Game {
 //    }
 
     public String getScore() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(player1.getName()).append(" ").append(player1.getScore());
-        builder.append(" : ");
-        builder.append(player2.getScore()).append(" ").append(player2.getName());
-        return builder.toString();
+        return String.format(" %s [ %d : %d ] %s ", player1.getName(), player1.getScore(), player2.getScore(), player2.getName());
     }
 }

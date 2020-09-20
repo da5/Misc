@@ -28,8 +28,6 @@ public class GameTest {
 
     @Test
     public void testGame() {
-
-
         Game.GameMove gameMove = game.performMove();
         assert gameMove.getScore()[0]==0;
         assert gameMove.getScore()[1]==0;
@@ -41,8 +39,7 @@ public class GameTest {
 
         Mockito.when(player1.move()).thenReturn(null);
         assert game.performMove()==null;
-        assert game.getScore().contains("player1 0 : 1 player2");
-
+        assert game.getScore().equals(" player1 [ 0 : 1 ] player2 ");
     }
 }
 

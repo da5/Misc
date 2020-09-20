@@ -26,7 +26,7 @@ public class Computer extends Player {
     public Computer() {
         super(name);
         moveStrategies = new MoveStrategy[4];
-        moveStrategies[3] = new MoveStrategy(new Randomized(), 1.0);
+        lastUsedStrategy = moveStrategies[3] = new MoveStrategy(new Randomized(), 1.0);
         moveStrategies[2] = new MoveStrategy(new Rotation(), 2.0);
         moveStrategies[1] = new MoveStrategy(new FrequencyCounting(), 4.0);
         moveStrategies[0] = new MoveStrategy(new PatternMatching(), 8.0);
@@ -44,18 +44,21 @@ public class Computer extends Player {
                 break;
             }
         }
-        System.out.println("Computer selected strategy : " + selected.getStrategy().getName() + ", " + selected.getStrategy().ready());
+        System.out.println("{ Computer selected strategy : " + selected.getStrategy().getName());
         String strategies = "";
         for(int i=0; i<4; i++) {
             strategies = strategies + String.format(" %s, %s : %.8f",
                     moveStrategies[i].getStrategy().getName(), moveStrategies[i].getStrategy().ready(), moveStrategies[i].getScore());
         }
+        strategies = strategies + " } ";
         System.out.println(strategies);
         return selected;
     }
 
     public MoveType move() {
-        return moveMap.get(lastUsedStrategy.getStrategy().suggestOpponentMove()).losesTo();
+        MoveType computerMove = moveMap.get(lastUsedStrategy.getStrategy().suggestOpponentMove()).losesTo();
+        System.out.println(String.format("%s input : %s", name, computerMove.label));
+        return computerMove;
     }
 
     public void consumeOpponentInput(MoveType moveType, boolean win) {

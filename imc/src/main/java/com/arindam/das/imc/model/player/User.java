@@ -1,21 +1,23 @@
 package com.arindam.das.imc.model.player;
 
+import com.arindam.das.imc.common.CommandLineInput;
 import com.arindam.das.imc.common.MoveType;
 import com.arindam.das.imc.model.Player;
 
+import java.io.InputStream;
 import java.util.Scanner;
 
 public class User extends Player {
-    private Scanner scanner;
+    private CommandLineInput commandLineInput;
 
-    public User(String name) {
+    public User(String name, CommandLineInput commandLineInput) {
         super(name);
-        scanner = new Scanner(System.in);
+        this.commandLineInput = commandLineInput;
     }
 
     public MoveType move() {
         System.out.print(getName() + " input : ");
-        String inputMove = scanner.next();
+        String inputMove = commandLineInput.getUserInput();
         return MoveType.valueOfLabel(inputMove.toUpperCase());
     }
 

@@ -1,8 +1,8 @@
 package com.arindam.das.imc.core.assets.strategies;
 
-import com.arindam.das.imc.exceptions.StrategyNotReadyException;
 import com.arindam.das.imc.common.MoveType;
 import com.arindam.das.imc.core.assets.Strategy;
+import com.arindam.das.imc.exceptions.StrategyNotReadyException;
 
 public class Rotation implements Strategy {
 
