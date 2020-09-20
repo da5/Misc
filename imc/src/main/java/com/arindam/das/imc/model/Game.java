@@ -56,8 +56,8 @@ public class Game {
         GameMove gameMove = new GameMove(player1Move, player2Move, new int[]{player1.getScore(), player2.getScore()});
         gameMoves.add(gameMove);
 
-        player1.consumeOpponentInput(player2Move, player1win);
-        player2.consumeOpponentInput(player1Move, player2win);
+        player1.consumeOpponentInput(player2Move, player1win? 1 : (player2win? -1 : 0));
+        player2.consumeOpponentInput(player1Move, player2win? 1 : (player1win? -1 : 0));
         return gameMove;
     }
 

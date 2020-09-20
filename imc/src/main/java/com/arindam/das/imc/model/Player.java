@@ -18,5 +18,5 @@ public abstract class Player {
 
     public abstract MoveType move();
 
-    public abstract void consumeOpponentInput(MoveType moveType, boolean win);
+    public abstract void consumeOpponentInput(MoveType moveType, int reward);
 }

@@ -29,42 +29,40 @@ public class ComputerTest {
 
     @Test
     public void testStrategySelection() {
-        computer.consumeOpponentInput(MoveType.scissors, false);
+        computer.consumeOpponentInput(MoveType.scissors, -1);
         assert computer.getLastUsedStrategy().getStrategy().getName().equals(randomized.getName());
 
-        computer.consumeOpponentInput(MoveType.scissors, false);
+        computer.consumeOpponentInput(MoveType.scissors, -1);
         assert computer.getLastUsedStrategy().getStrategy().getName().equals(rotation.getName());
 
 
-        computer.consumeOpponentInput(MoveType.scissors, false);
+        computer.consumeOpponentInput(MoveType.scissors, -1);
         assert computer.getLastUsedStrategy().getStrategy().getName().equals(rotation.getName());
 
 
-        computer.consumeOpponentInput(MoveType.scissors, false);
+        computer.consumeOpponentInput(MoveType.scissors, -1);
         assert computer.getLastUsedStrategy().getStrategy().getName().equals(rotation.getName());
 
 
-        computer.consumeOpponentInput(MoveType.scissors, false);
+        computer.consumeOpponentInput(MoveType.scissors, 1);
         assert computer.getLastUsedStrategy().getStrategy().getName().equals(frequency.getName());
 
-        computer.consumeOpponentInput(MoveType.scissors, false);
+        computer.consumeOpponentInput(MoveType.scissors, 0);
         assert computer.getLastUsedStrategy().getStrategy().getName().equals(frequency.getName());
 
-        computer.consumeOpponentInput(MoveType.scissors, false);
+        computer.consumeOpponentInput(MoveType.scissors, 1);
         assert computer.getLastUsedStrategy().getStrategy().getName().equals(pattern.getName());
 
-        computer.consumeOpponentInput(MoveType.scissors, false);
+        computer.consumeOpponentInput(MoveType.scissors, 0);
         assert computer.getLastUsedStrategy().getStrategy().getName().equals(pattern.getName());
 
-        computer.consumeOpponentInput(MoveType.scissors, true);
+        computer.consumeOpponentInput(MoveType.scissors, 1);
         assert computer.getLastUsedStrategy().getStrategy().getName().equals(pattern.getName());
 
         Move move = MoveFactory.create(computer.move());
         assert move.beats(computer.getLastUsedStrategy().getStrategy().suggestOpponentMove());
 
-        computer.consumeOpponentInput(MoveType.scissors, false);
+        computer.consumeOpponentInput(MoveType.scissors, 0);
         assert computer.getLastUsedStrategy().getStrategy().getName().equals(pattern.getName());
-
     }
-
 }

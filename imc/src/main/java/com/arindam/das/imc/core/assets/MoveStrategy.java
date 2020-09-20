@@ -13,7 +13,7 @@ public class MoveStrategy {
         this.score *= 0.9;
     }
 
-    public void incrementScore() {
-        this.score++;
+    public void incrementScore(int reward) {
+        this.score += reward;
     }
 }

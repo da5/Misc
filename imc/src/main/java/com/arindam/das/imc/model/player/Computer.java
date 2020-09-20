@@ -44,13 +44,13 @@ public class Computer extends Player {
                 break;
             }
         }
-        System.out.println("{ Computer selected strategy : " + selected.getStrategy().getName());
+        System.out.println("{ \n Computer selected strategy : " + selected.getStrategy().getName());
         String strategies = "";
         for(int i=0; i<4; i++) {
             strategies = strategies + String.format(" %s, %s : %.8f",
                     moveStrategies[i].getStrategy().getName(), moveStrategies[i].getStrategy().ready(), moveStrategies[i].getScore());
         }
-        strategies = strategies + " } ";
+        strategies = strategies + " \n} ";
         System.out.println(strategies);
         return selected;
     }
@@ -61,14 +61,14 @@ public class Computer extends Player {
         return computerMove;
     }
 
-    public void consumeOpponentInput(MoveType moveType, boolean win) {
+    public void consumeOpponentInput(MoveType moveType, int reward) {
         for(MoveStrategy moveStrategy: moveStrategies) {
             moveStrategy.getStrategy().consume(moveType);
             moveStrategy.decayScore();
         }
-        if(win) {
-            lastUsedStrategy.incrementScore();
-        }
+
+        lastUsedStrategy.incrementScore(reward);
+
         Arrays.sort(moveStrategies, (o1, o2) -> o2.getScore().compareTo(o1.getScore()));
         lastUsedStrategy = selectStrategy();
     }

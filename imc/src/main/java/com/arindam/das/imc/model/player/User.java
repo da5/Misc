@@ -4,9 +4,6 @@ import com.arindam.das.imc.common.CommandLineInput;
 import com.arindam.das.imc.common.MoveType;
 import com.arindam.das.imc.model.Player;
 
-import java.io.InputStream;
-import java.util.Scanner;
-
 public class User extends Player {
     private CommandLineInput commandLineInput;
 
@@ -21,7 +18,7 @@ public class User extends Player {
         return MoveType.valueOfLabel(inputMove.toUpperCase());
     }
 
-    public void consumeOpponentInput(MoveType moveType, boolean win) {
+    public void consumeOpponentInput(MoveType moveType, int reward) {
         //do nothing
     }
 }

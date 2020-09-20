@@ -19,7 +19,7 @@ public class UserTest {
 
     @Test
     public void TestUserMove() {
-        user.consumeOpponentInput(MoveType.scissors, true);
+        user.consumeOpponentInput(MoveType.scissors, 1);
         assert user.move().equals(MoveType.rock);
     }
 }
