@@ -1,18 +1,10 @@
 package practice.Miscellaneous;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
+import sun.reflect.generics.tree.Tree;
+
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class Solution {
@@ -225,23 +217,110 @@ public class Solution {
         return result;
     }
 
+    public static int solution1(String S) {
+        int n  = S.length();
+        int max = 0;
+        for(int i=0; i<n-1; i++) {
+            int val = Integer.parseInt(S.substring(i,i+2));
+            max = Math.max(max, val);
+        }
+        return max;
+    }
+
+    public static int solution(String S) {
+        int n  = S.length();
+        int max = 0;
+        for(int i=0; i<n-1; i++) {
+            int val = Integer.parseInt(S.substring(i,i+2));
+            max = Math.max(max, val);
+        }
+        return max;
+    }
+
+    public static int solution2(String S) {
+        int n  = S.length();
+        int[] frequency = new int[26];
+
+        for(int i=0; i<n; i++) {
+            frequency[S.charAt(i)-'a']++;
+        }
+        Arrays.sort(frequency);
+
+        int count = 0;
+        int i;
+        for(i=25; i>0; i--) {
+            if(frequency[i]>0 && frequency[i]==frequency[i-1]) {
+                frequency[i-1]--;
+                count++;
+            }
+            if(frequency[i-1]<=1) {
+                i -= 2;
+                break;
+            }
+        }
+
+        for(; i>=0; i--) {
+            count += frequency[i];
+        }
+        return count;
+    }
+
+    public static int solution3(int[] A) {
+        // 5 2 4 6 3 7
+        NavigableMap<Integer, List<Integer>> map = new TreeMap<>();
+        int n = A.length;
+        for(int i=1; i<n-1; i++) {
+            map.putIfAbsent(A[i], new ArrayList<>());
+            map.get(A[i]).add(i);
+        }
+
+        int result=Integer.MAX_VALUE;
+
+        for(int key: map.keySet()) {
+            List<Integer> positions = map.get(key);
+            if(positions.size()>1) {
+                return key*2;
+            } else {
+                int searchKey = key;
+                while (map.higherEntry(searchKey)!=null) {
+                    Map.Entry<Integer, List<Integer>> entry = map.higherEntry(searchKey);
+                    if(entry!=null) {
+                        for(int nextPosition : entry.getValue()) {
+                            if(Math.abs(nextPosition - positions.get(0)) > 1) {
+                                return key + entry.getKey();
+                            }
+                        }
+                        searchKey = entry.getKey();
+                    }
+                }
+
+
+            }
+
+        }
+        return result;
+    }
+
     public static void main(String[] args){
+//        Scanner scanner = new Scanner(System.in);
+//        List<List<Long>> listOfLists = new ArrayList<>();
+//        for(int i=0; i<10000; i++) {
+//            List<Long> list = new ArrayList<>();
+//            for(int j=0; j<10000; j++) {
+//                for(int k=0; k<10; k++) {
+//                    list.add(Long.valueOf(i*j));
+//                }
+//            }
+//            listOfLists.add(list);
+//            System.out.println("End of round " + i);
+//        }
+        int[] arr = {1,2,3,4,5};
+//        int[] arr = {5, 2, 4, 6, 3, 7};
+        System.out.println(solution3(arr));
+        //ccceeaaffdd
 
-
-
-//        String S = "-";
-//
-//        String str = licenseKeyFormatting(S, 1);
-//
-//        isIsomorphic("add", "egg");
-
-//        String[] strings = {"yo","ew","fc","zrc","yodn","fcm","qm","qmo","fcmz","z","ewq","yod","ewqz","y"};
-//        System.out.println(longestWord(strings));
-
-//        char[] tasks = {'A','A','A','A','A','A','B','C','D','E','F','G'};
-//        System.out.println(leastInterval(tasks, 2));
-
-        System.out.println(romanToInt("MMCCCXCIX"));
+        ExecutorService es = Executors.newFixedThreadPool(5);
+        
 
     }
 }
